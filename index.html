@@ -1,0 +1,239 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#164B3B"><title>純粹麻將｜單機練習</title><style>:root{font-family:Arial,"Microsoft JhengHei",sans-serif;color:#f8f5ec;background:#102a23;font-synthesis:none}*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 50% 50%,#1a503f 0,#102a23 75%);min-height:100vh}header,footer{display:flex;align-items:center;justify-content:space-between;padding:26px 5vw}header{border-bottom:1px solid #b9a07533}.brand{font-size:16px;letter-spacing:3px;color:inherit;text-decoration:none}.brand span{display:block;font-size:11px;letter-spacing:6px;color:#b9a075;margin-top:7px}button,input{font:inherit}button{cursor:pointer;border:1px solid #b9a075;background:#f8f5ec;color:#164b3b;padding:13px 25px;border-radius:4px;transition:transform .12s}button:hover{transform:translateY(-2px)}button:disabled{opacity:.45;cursor:default;transform:none}.quiet{background:transparent;color:#e1d7bd;border-color:#b9a07555}input{padding:14px;border-radius:4px;border:1px solid #b9a07577;background:#0c3026;color:#fff;width:100%;margin:8px 0 15px}label{font-size:13px;color:#ceceb9}main{min-height:72vh}h1{font-size:clamp(38px,6vw,76px);font-family:serif;font-weight:400;letter-spacing:10px;margin:22px 0}h2{font-family:serif;letter-spacing:4px;font-size:28px;font-weight:400}p{line-height:1.8}.eyebrow{font-size:11px;letter-spacing:5px;color:#b9a075}.home{max-width:1100px;margin:70px auto;display:grid;grid-template-columns:1.1fr 1fr;gap:80px;padding:0 35px;align-items:center}.tagline{letter-spacing:5px;color:#d8d6c9}.hero-tiles{display:flex;justify-content:center;gap:13px;margin:50px 0;transform:rotate(-8deg)}.hero-tiles svg{width:88px;filter:drop-shadow(8px 18px 9px #0007)}.panel{padding:30px;border:1px solid #b9a07544;border-radius:10px;background:#103d3188}.actions{display:flex;gap:12px;flex-wrap:wrap}.caption{color:#adbcb0;font-size:12px}.lobby{max-width:850px;margin:40px auto;padding:0 25px}.room-code{font-size:36px;letter-spacing:9px;color:#e0d1ae}.seats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:30px 0}.seat{border:1px solid #b9a07544;border-radius:8px;padding:22px 12px;text-align:center;background:#103d31}.seat strong{display:block;margin:15px 0;overflow-wrap:anywhere}.wind{font:30px serif;color:#b9a075}.online{color:#9ec4a1}.offline{color:#d88d79}.table-wrap{padding:15px;max-width:1400px;margin:auto}.table-head{display:flex;justify-content:space-between;gap:15px;color:#d4d9ca;font-size:13px;margin:10px 0 18px}.table{min-height:610px;position:relative;background:radial-gradient(ellipse,#1c5d47,#164b3b);border:9px solid #103d31;outline:1px solid #b9a07555;border-radius:35px;box-shadow:0 20px 70px #0004;display:grid;grid-template-columns:135px 1fr 135px;grid-template-rows:110px 1fr 145px;gap:10px;padding:15px}.player{font-size:12px;text-align:center;align-self:center}.player.active .player-name{color:#fff;border-bottom:2px solid #b9a075}.player-name{display:inline-block;padding:5px 8px;color:#d0d9c7}.north{grid-column:2;grid-row:1}.west{grid-column:1;grid-row:2}.east{grid-column:3;grid-row:2}.south{grid-column:1/4;grid-row:3}.backs{display:flex;justify-content:center;gap:1px;margin:5px auto}.backs svg{width:18px}.west .backs,.east .backs{flex-wrap:wrap;max-width:95px}.tiles{display:flex;gap:3px;justify-content:center;flex-wrap:wrap}.tiles svg{width:25px}.hand{display:flex;gap:clamp(1px,.3vw,5px);justify-content:center;margin:14px auto 10px;max-width:100%}.tile{padding:0;background:none;border:0;min-width:0;flex:0 1 49px;filter:drop-shadow(0 4px 2px #0004)}.tile svg{display:block;width:100%}.tile.selected{transform:translateY(-12px);filter:drop-shadow(0 0 4px #d8c596)}.center{grid-column:2;grid-row:2;display:grid;grid-template-columns:1fr 1fr;gap:12px;align-content:center}.river{display:flex;flex-wrap:wrap;gap:3px;align-content:start;min-height:88px;border:1px solid #b9a07522;padding:5px;border-radius:6px}.river svg{width:25px}.center-label{grid-column:1/3;text-align:center;letter-spacing:5px;color:#b9a075;font-size:12px}.game-actions{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin:20px 0}.game-actions button{padding:10px 20px}.result{margin:30px auto;max-width:700px}.result table{width:100%;border-collapse:collapse}.result td,.result th{text-align:left;padding:13px;border-bottom:1px solid #b9a07544}.notice{border-left:2px solid #b9a075;padding-left:14px;color:#ddcfb2}.proof{width:100%;min-height:100px;background:#0c3026;color:#d9dfcc;border:1px solid #b9a07544;font-size:11px}#message{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#f8f5ec;color:#164b3b;padding:10px 20px;border-radius:5px;z-index:5;max-width:90%;box-shadow:0 3px 15px #0004}#message:empty{display:none}footer{font-size:11px;color:#93a796;gap:20px}dialog{max-width:500px;background:#f8f5ec;color:#222522;border:0;border-radius:8px;padding:30px}dialog::backdrop{background:#001b15bb}button:focus-visible,input:focus-visible{outline:3px solid #d0bb85;outline-offset:3px}@media(max-width:760px){.home{grid-template-columns:1fr;gap:20px;margin:35px auto}.hero-tiles{display:none}.seats{grid-template-columns:repeat(2,1fr)}header,footer{padding:18px}.table{grid-template-columns:80px 1fr 80px;grid-template-rows:85px 1fr 125px;min-height:460px;padding:5px;gap:4px;border-width:5px;border-radius:20px}.table-wrap{padding:8px}.river svg{width:19px}.river{min-height:65px;gap:1px}.backs svg{width:12px}.tiles svg{width:18px}.table-head{font-size:11px}.game-actions{margin:12px 0}.game-actions button{padding:9px 14px}.brand{font-size:12px}.player{font-size:10px}}@media(max-height:600px) and (orientation:landscape){header{padding:10px 25px}.brand span,footer{display:none}.table{min-height:360px;grid-template-rows:65px 1fr 100px}.river{min-height:48px}.river svg{width:19px}.hand{margin-top:8px}.tile{flex-basis:38px}.table-head{margin:0 0 8px}.game-actions{margin:8px}}
+.profile-dialog{width:min(640px,94vw);max-width:640px;background:#103d31;color:#f8f5ec;max-height:90vh}.profile-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:22px 0}.profile-stats>div{border:1px solid #b9a07544;border-radius:6px;padding:16px;text-align:center}.profile-stats strong{display:block;font-size:27px;color:#e0d1ae}.profile-stats span{font-size:12px;color:#adbcb0}.profile-history{max-height:220px;overflow:auto;margin:24px 0;font-size:12px}.profile-history p{border-bottom:1px solid #b9a07522;padding-bottom:10px}.form-error{color:#ffbaaa;font-size:13px}.account-form .actions button{flex-grow:1}header{gap:12px}header .brand{margin-right:auto}header button{padding:10px 15px}[hidden]{display:none!important}
+
+.solo-hint{text-align:center;font-size:12px;color:#b3c2b4}.river-label{display:block;flex-basis:100%;font-size:9px;color:#b9a075}.meld{display:inline-flex;gap:2px;margin-right:8px}.meld svg{width:25px}.result-hand{display:flex;flex-wrap:wrap;gap:4px;margin:20px 0}.result-hand svg{width:38px}.result .actions{margin:25px 0}#brand{cursor:pointer}.profile-dialog button{font-size:13px}.table-head .actions{gap:6px}.table-head button{font-size:11px;padding:8px 10px}@media(max-width:500px){.table{grid-template-columns:52px 1fr 52px}.hand{overflow-x:auto;justify-content:flex-start;min-height:65px;padding-top:12px}.tile{flex:0 0 33px}.river svg{width:17px}.table-head{flex-wrap:wrap}.player-name{padding:3px}.tiles svg,.meld svg{width:15px}header{flex-wrap:wrap}.brand{flex-basis:100%}.profile-stats{grid-template-columns:repeat(2,1fr)}}</style></head><body><header><a id="brand" class="brand" role="button" tabindex="0">PURE MAHJONG <span>純粹麻將 · 單機版</span></a><button id="rulesButton" class="quiet">規則</button><button id="sound" class="quiet" aria-pressed="false">音效 關</button><button id="profileButton" class="quiet">遊玩紀錄</button></header><main id="app"></main><p id="message" role="status" aria-live="polite"></p><footer>一個人，也能好好打一局。<span>0.3.1 · 你＋三位電腦 · 單機紀錄</span></footer><dialog id="rules"><h2>單機台灣十六張</h2><p>你控制下方手牌，三位電腦玩家操作其餘三席。電腦只看自己的手牌與公開資訊。沒有真人配對、多人連線或操作倒數。</p><p>五面子一對將；最低一台。底分10、每台10，自摸三家各付，放槍單家支付。莊胡與流局連莊，東南兩圈後結束。</p><p>胡優先於碰槓，碰槓優先於吃；同張單胡，由下家起最近者優先。暗槓不破門清；只可搶補槓。花牌自動補牌。</p><p>平胡採五順、數牌將、無花的本遊戲標準；其餘台型沿用原始碼 docs/RULES.md。此為單機練習測試版。</p><p>所有資料僅保存在此瀏覽器。清除瀏覽器資料會遺失；不需要註冊或登入，遊玩紀錄僅保存在此瀏覽器，不會自動同步雲端。</p><button id="closeRules">知道了</button></dialog><dialog id="newGame"><h2>開始新場次？</h2><p>目前場次將被新場次取代，已完成的個人紀錄會保留。</p><div class="actions"><button id="confirmNew">開始新場次</button><button id="cancelNew">繼續原場次</button></div></dialog><script>const Engine=(()=>{const faces = Array.from({length:34},(_,i)=>i);
+const kind = id => Math.floor(id/4);
+const flower = id => id>=136;
+const deck = () => Array.from({length:144},(_,i)=>i);
+const label = id => {const k=kind(id);return flower(id)?['春','夏','秋','冬','梅','蘭','竹','菊'][id-136]:k<27?`${k%9+1}${['萬','筒','索'][Math.floor(k/9)]}`:['東','南','西','北','中','發','白'][k-27]};
+function counts(ids){const c=Array(34).fill(0);for(const id of ids){if(!Number.isInteger(id)||id<0||id>=136)throw Error('非法手牌');c[kind(id)]++;if(c[kind(id)]>4)throw Error('同牌超過四張')}return c}
+function svg(id,back=false){
+ const k=kind(id),n=k%9+1,ink=k<9||k===31?'#B63E37':k<27||k===32?'#287052':'#222522';let art='';
+ if(back)art='<rect x="8" y="8" width="44" height="68" rx="5" fill="#164B3B"/><path d="M15 42 30 20 45 42 30 64Z" fill="none" stroke="#B9A075" stroke-width="2"/>';
+ else if(k>=9&&k<27){for(let i=0;i<n;i++){let x=15+(i%3)*15,y=21+Math.floor(i/3)*22;art+=k<18?`<circle cx="${x}" cy="${y}" r="5" fill="none" stroke="${i%3===1?'#B63E37':ink}" stroke-width="2.5"/><circle cx="${x}" cy="${y}" r="1.3" fill="${ink}"/>`:`<path d="M${x} ${y-7}v14m-3-10 6-2m-6 9 6-2" stroke="${ink}" stroke-width="3" stroke-linecap="round"/>`}}
+ else if(k===33)art='<rect x="14" y="15" width="32" height="51" rx="2" fill="none" stroke="#287052" stroke-width="3"/>';
+ else art=`<text x="30" y="${k<9?35:53}" text-anchor="middle" font-family="serif" font-size="${k<9?27:33}" fill="${ink}">${flower(id)?label(id):k<9?['一','二','三','四','五','六','七','八','九'][n-1]:label(id)}</text>${k<9?'<text x="30" y="65" text-anchor="middle" font-family="serif" font-size="24" fill="#222522">萬</text>':''}`;
+ return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 86" role="img" aria-label="${back?'牌背':label(id)}"><rect x="1" y="3" width="58" height="82" rx="7" fill="#c6c5b9"/><rect x="1" y="1" width="58" height="80" rx="7" fill="#F8F5EC" stroke="#dedbce"/>${art}</svg>`;
+}
+
+function decompositions(hand,melds=[]){
+ const all=[...hand,...melds.flatMap(m=>m.tiles??[])];
+ if(melds.length>5||hand.length!==17-3*melds.length||new Set(all).size!==all.length)return [];
+ if(melds.some(m=>!['chi','pong','kong','closedKong'].includes(m.type)||m.tiles.length!==(m.type.toLowerCase().includes('kong')?4:3)))return [];
+ let c;try{c=counts(hand);counts([...hand,...melds.flatMap(m=>m.tiles)])}catch{return []}
+ for(const m of melds){const ks=m.tiles.map(kind).sort((a,b)=>a-b);if(m.type==='chi'?! (ks[0]<27&&Math.floor(ks[0]/9)===Math.floor(ks[2]/9)&&ks[1]===ks[0]+1&&ks[2]===ks[0]+2):!ks.every(k=>k===ks[0]))return []}
+ const out=[];function visit(groups,pair){let k=c.findIndex(x=>x);if(k<0){if(groups.length+melds.length===5)out.push({pair,groups:[...groups]});return}if(c[k]>=3){c[k]-=3;visit([...groups,{type:'pong',k}],pair);c[k]+=3}if(k<27&&k%9<=6&&c[k+1]&&c[k+2]){c[k]--;c[k+1]--;c[k+2]--;visit([...groups,{type:'chi',k}],pair);c[k]++;c[k+1]++;c[k+2]++}}
+ for(let p=0;p<34;p++)if(c[p]>=2){c[p]-=2;visit([],p);c[p]+=2}return out;
+}
+function score(hand,melds=[],ctx={}){
+ const options=decompositions(hand,melds).map(d=>{let lines=[];const add=(name,tai)=>lines.push({name,tai});const groups=[...d.groups,...melds.map(m=>({type:m.type,k:kind(m.tiles[0])}))],trip=k=>groups.some(g=>g.type!=='chi'&&g.k===k);const ks=[...hand,...melds.flatMap(m=>m.tiles)].map(kind),suits=new Set(ks.filter(k=>k<27).map(k=>Math.floor(k/9))),honors=ks.some(k=>k>=27);
+ if(ctx.selfDraw)add('自摸',1);if(!melds.some(m=>m.type!=='closedKong'))add('門清',1);if(Number.isInteger(ctx.winner)&&ctx.winner===ctx.dealer){add('莊家',1);if(ctx.streak)add('連莊',2*ctx.streak)}
+ if(trip(27+(ctx.seatWind??0)))add('門風刻',1);if(trip(27+(ctx.roundWind??0)))add('圈風刻',1);
+ for(const f of ctx.flowers??[])if((f-136)%4===(ctx.seatWind??0))add('正花',1);
+ if(groups.every(g=>g.type==='chi')&&d.pair<27&&!(ctx.flowers?.length))add('平胡',2);
+ if(groups.every(g=>g.type!=='chi'))add('碰碰胡',4);
+ if(suits.size===1)add(honors?'混一色':'清一色',honors?4:8);if(suits.size===0)add('字一色',16);
+ const dragons=[31,32,33].filter(trip).length,winds=[27,28,29,30].filter(trip).length;
+ if(dragons===3)add('大三元',8);else if(dragons===2&&d.pair>=31)add('小三元',4);
+ if(winds===4)add('大四喜',16);else if(winds===3&&d.pair>=27&&d.pair<=30)add('小四喜',8);
+ if(ctx.kongDraw&&ctx.selfDraw)add('槓上開花',1);if(ctx.robKong)add('搶槓胡',1);if(ctx.lastTile&&ctx.selfDraw)add('海底撈月',1);
+ if(ctx.heaven){lines=lines.filter(l=>!['門清','莊家','連莊','自摸'].includes(l.name));add('天胡',16)}else if(ctx.earth)add('地胡',16);
+ return {lines,tai:lines.reduce((s,l)=>s+l.tai,0),decomposition:d};});return options.sort((a,b)=>b.tai-a.tai)[0]??null;
+}
+function payments(tai,winner,from){if(!Number.isInteger(tai)||tai<1)throw Error('最低一台');if(!Number.isInteger(winner)||winner<0||winner>3||(from!==null&&(!Number.isInteger(from)||from<0||from>3||from===winner)))throw Error('付款座位錯誤');const delta=[0,0,0,0],amount=10+tai*10;for(let i=0;i<4;i++)if(i!==winner&&(from===null||i===from)){delta[i]-=amount;delta[winner]+=amount}return delta}
+
+class Game {
+ constructor(wall,{dealer=0,roundWind=0,streak=0}={}){if(wall.length!==144||new Set(wall).size!==144||wall.some(t=>!Number.isInteger(t)||t<0||t>143))throw Error('牌牆錯誤');this.wall=[...wall];this.initialWall=[...wall];this.players=Array.from({length:4},()=>({hand:[],melds:[],flowers:[],river:[]}));Object.assign(this,{dealer,roundWind,streak,turn:dealer,phase:'turn',seq:0,drawCount:0,discardCount:0,interrupted:false,lastKong:false});for(let n=0;n<16;n++)for(let s=0;s<4;s++)this.draw(s);this.draw(dealer);this.lastKong=false;this.sort()}
+ sort(){for(const p of this.players)p.hand.sort((a,b)=>a-b)}
+ draw(s,replacement=false){if(!this.wall.length){this.endDraw();return}let t=replacement?this.wall.pop():this.wall.shift();let replacedFlower=false;while(flower(t)){replacedFlower=true;this.players[s].flowers.push(t);if(!this.wall.length){this.endDraw();return}t=this.wall.pop()}this.players[s].hand.push(t);this.drawn=t;this.lastKong=replacement&&!replacedFlower;return t}
+ endDraw(){this.phase='ended';this.result={draw:true,delta:[0,0,0,0]}}
+ evaluate(s,extra=null,rob=false){const p=this.players[s];return score([...p.hand,...(extra===null?[]:[extra])],p.melds,{winner:s,dealer:this.dealer,streak:this.streak,seatWind:(s-this.dealer+4)%4,roundWind:this.roundWind,flowers:p.flowers,selfDraw:extra===null,kongDraw:this.lastKong,lastTile:!this.wall.length,robKong:rob,heaven:s===this.dealer&&this.discardCount===0,earth:s!==this.dealer&&this.discardCount===1&&!this.interrupted})}
+ options(s){if(this.phase==='ended')return [];if(this.phase==='response')return this.pending.options[s]??[];if(s!==this.turn)return [];const p=this.players[s],out=[{type:'discard'}],win=this.evaluate(s);if(win?.tai>=1)out.push({type:'win'});if(this.wall.length){for(let k=0;k<34;k++){const ts=p.hand.filter(t=>kind(t)===k);if(ts.length===4)out.push({type:'closedKong',tiles:ts});if(ts.length&&p.melds.some(m=>m.type==='pong'&&kind(m.tiles[0])===k))out.push({type:'addedKong',tiles:[ts[0]]})}}return out}
+ candidates(from,tile,rob=false){const opts={};for(let n=1;n<4;n++){let s=(from+n)%4,p=this.players[s],same=p.hand.filter(t=>kind(t)===kind(tile)),o=[];if(this.evaluate(s,tile,rob)?.tai>=1)o.push({type:'win'});if(!rob){if(same.length>=2)o.push({type:'pong',tiles:same.slice(0,2)});if(same.length===3&&this.wall.length)o.push({type:'kong',tiles:same});if(n===1&&kind(tile)<27){const k=kind(tile);for(let start=k-2;start<=k;start++){if(start<0||start%9>6||Math.floor(start/9)!==Math.floor(k/9))continue;const ts=[start,start+1,start+2].filter(x=>x!==k).map(x=>p.hand.find(t=>kind(t)===x));if(ts.every(x=>x!==undefined))o.push({type:'chi',tiles:ts})}}}if(o.length)opts[s]=[...o,{type:'pass'}]}return opts}
+ open(from,tile,rob=false){const options=this.candidates(from,tile,rob);if(Object.keys(options).length){this.phase='response';this.pending={from,tile,rob,options,replies:{}}}else this.advance(from,tile,rob)}
+ remove(s,ts){const h=this.players[s].hand;for(const t of ts){const i=h.indexOf(t);if(i<0)throw Error('不持有此牌');h.splice(i,1)}}
+ win(s,from,tile=null,rob=false){const scored=this.evaluate(s,tile,rob);if(!scored||scored.tai<1)throw Error('不能胡');this.phase='ended';this.result={winner:s,from,tile,...scored,delta:payments(scored.tai,s,from),hand:[...this.players[s].hand,...(tile===null?[]:[tile])]}}
+ advance(from,tile,rob){this.pending=null;if(rob){const p=this.players[from],m=p.melds.find(m=>m.type==='pong'&&kind(m.tiles[0])===kind(tile));this.remove(from,[tile]);m.tiles.push(tile);m.type='kong';this.turn=from;this.phase='turn';this.draw(from,true)}else{this.turn=(from+1)%4;this.phase='turn';this.draw(this.turn);this.drawCount++}this.sort()}
+ act(s,a,seq){if(seq!==this.seq)throw Error('狀態已更新');if(!Number.isInteger(s)||s<0||s>3||!a||typeof a.type!=='string')throw Error('非法操作');if(this.phase==='ended')throw Error('牌局已結束');
+ if(this.phase==='response'){const q=this.pending;if(!q.options[s]||q.replies[s])throw Error('無待回應操作');const selected=q.options[s].find(o=>o.type===a.type&&JSON.stringify(o.tiles??[])===JSON.stringify(a.tiles??[]));if(!selected)throw Error('非法回應');q.replies[s]=selected;this.seq++;if(Object.keys(q.replies).length<Object.keys(q.options).length)return;
+ const priority={win:3,pong:2,kong:2,chi:1,pass:0},eligible=Object.entries(q.replies).filter(([,x])=>x.type!=='pass').sort(([a,x],[b,y])=>priority[y.type]-priority[x.type]||((+a-q.from+4)%4)-((+b-q.from+4)%4));if(!eligible.length){this.advance(q.from,q.tile,q.rob);return}const [who,action]=eligible[0],s2=+who;if(action.type==='win'){this.win(s2,q.from,q.tile,q.rob);this.pending=null;return}const p=this.players[s2];this.remove(s2,action.tiles);p.melds.push({type:action.type,tiles:[...action.tiles,q.tile].sort((a,b)=>a-b),from:q.from});this.players[q.from].river.pop();this.pending=null;this.turn=s2;this.phase='turn';this.interrupted=true;this.drawn=null;this.lastKong=false;if(action.type==='kong')this.draw(s2,true);this.sort();return}
+ if(s!==this.turn)throw Error('不是你的回合');if(a.type==='discard'){if(!this.players[s].hand.includes(a.tile))throw Error('不持有此牌');this.remove(s,[a.tile]);this.players[s].river.push(a.tile);this.discardCount++;this.lastKong=false;this.open(s,a.tile)}else if(a.type==='win')this.win(s,null);else{const selected=this.options(s).find(o=>o.type===a.type&&JSON.stringify(o.tiles)===JSON.stringify(a.tiles));if(!selected)throw Error('非法操作');this.interrupted=true;if(a.type==='closedKong'){this.remove(s,a.tiles);this.players[s].melds.push({type:'closedKong',tiles:a.tiles});this.draw(s,true)}else if(a.type==='addedKong')this.open(s,a.tiles[0],true);else throw Error('非法操作')}this.seq++;this.sort();
+ }
+ view(s){return {seq:this.seq,phase:this.phase,turn:this.turn,dealer:this.dealer,roundWind:this.roundWind,streak:this.streak,remaining:this.wall.length,players:this.players.map((p,i)=>({hand:i===s?p.hand:undefined,count:p.hand.length,flowers:p.flowers,river:p.river,melds:p.melds.map(m=>m.type==='closedKong'&&i!==s?{type:m.type,count:4}:m)})),options:this.pending?.replies[s]?[]:this.options(s),pending:this.pending?{from:this.pending.from,tile:this.pending.tile,rob:this.pending.rob}:null,result:this.result}}
+}
+
+
+// Only receives Game.view(seat). Hidden hands and wall are never inputs.
+function chooseAction(view, seat) {
+  const choices = view.options ?? [];
+  if (!choices.length) return null;
+  for (const type of ['win', 'kong', 'closedKong', 'addedKong', 'pong']) {
+    const action = choices.find(option => option.type === type);
+    if (action) return structuredClone(action);
+  }
+  const chi = choices.filter(option => option.type === 'chi');
+  if (chi.length) return structuredClone(chi[0]);
+  if (choices.some(option => option.type === 'discard')) {
+    const hand = view.players[seat].hand;
+    const counts = Array(34).fill(0);
+    for (const tile of hand) counts[kind(tile)]++;
+    // Keep pairs, triples and nearby suited tiles. No future wall knowledge.
+    const usefulness = tile => {
+      const k = kind(tile);
+      let value = (counts[k] - 1) * 5;
+      if (k < 27) for (const delta of [-2,-1,1,2]) {
+        const other = k + delta;
+        if (other >= 0 && other < 27 && Math.floor(other/9) === Math.floor(k/9)) {
+          value += counts[other] * (Math.abs(delta) === 1 ? 2 : 1);
+        }
+      }
+      return value;
+    };
+    const tile = [...hand].sort((a,b) => usefulness(a)-usefulness(b) || b-a)[0];
+    return { type: 'discard', tile };
+  }
+  return choices.some(option => option.type === 'pass') ? { type: 'pass' } : null;
+}
+
+function localShuffle(random = globalThis.crypto) {
+  const wall = Array.from({length:144},(_,i)=>i);
+  const buffer = new Uint32Array(1);
+  for (let i = 143; i > 0; i--) {
+    const range = i+1, limit = Math.floor(2**32/range)*range;
+    let value;
+    do { random.getRandomValues(buffer); value = buffer[0]; } while (value >= limit);
+    const index = value % range;
+    [wall[i],wall[index]] = [wall[index],wall[i]];
+  }
+  return wall;
+}
+
+const guestKey='pure-mahjong-guest-v1';
+const empty=()=>({id:'guest',username:'guest',nickname:'你',stats:{hands:0,wins:0,selfDraws:0,dealtIn:0,draws:0,totalDelta:0},history:[],save:null});
+class GuestProfiles {
+  constructor(storage){this.storage=storage;this.temporary=false;try{const raw=storage.getItem(guestKey);this.data=raw?JSON.parse(raw):empty();if(this.data.id!=='guest'||!this.data.stats||!Array.isArray(this.data.history))throw Error('invalid guest data')}catch{this.data=empty();this.temporary=true}}
+  persist(){try{this.storage.setItem(guestKey,JSON.stringify(this.data))}catch{this.temporary=true}}
+  public(){const {id,username,nickname,stats,history}=this.data;return structuredClone({id,username,nickname,stats,history})}
+  save(_id,snapshot){this.data.save=structuredClone(snapshot);this.persist()}
+  restore(){return structuredClone(this.data.save)}
+  finish(_id,handId,result,snapshot){
+    if(this.data.history.some(row=>row.id===handId))return false;
+    if(!Array.isArray(result.delta)||result.delta.length!==4||!result.delta.every(Number.isSafeInteger)||result.delta.reduce((a,b)=>a+b,0)!==0)throw Error('結算資料錯誤');
+    const stats=this.data.stats;stats.hands++;stats.totalDelta+=result.delta[0];
+    if(result.draw)stats.draws++;else if(result.winner===0){stats.wins++;if(result.from===null)stats.selfDraws++}else if(result.from===0)stats.dealtIn++;
+    this.data.history.unshift({id:handId,endedAt:Date.now(),delta:result.delta[0],outcome:result.draw?'流局':result.winner===0?(result.from===null?'自摸':'胡牌'):result.from===0?'放槍':'完成'});
+    this.data.history=this.data.history.slice(0,500);this.data.save=structuredClone(snapshot);this.persist();return true;
+  }
+  export(){return {format:'PURE-MAHJONG-GUEST-RECORD',version:1,exportedAt:new Date().toISOString(),profile:this.public()}}
+}
+
+return {Game,svg,label,chooseAction,localShuffle,GuestProfiles};})();
+(() => {
+  'use strict';
+  const {Game,svg,label,chooseAction,localShuffle,GuestProfiles}=Engine;
+  const app=document.querySelector('#app'),status=document.querySelector('#message');
+  let profiles,profile=null,session=null,selected=null,timer=null,paused=false,delay=650,sound=false;
+  const names=()=>[profile?.nickname??'你','電腦・南','電腦・西','電腦・北'];
+  const el=(tag,text,cls)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;if(cls)n.className=cls;return n};
+  const button=(text,fn,cls)=>{const n=el('button',text,cls);n.type='button';n.onclick=fn;return n};
+  const tell=text=>{status.textContent=text;clearTimeout(tell.timer);tell.timer=setTimeout(()=>status.textContent='',6000)};
+  const tile=(id,back=false)=>{const wrap=el('span');wrap.innerHTML=svg(id,back);return wrap.firstElementChild};
+  const save=()=>{try{profiles.save(profile.id,session)}catch{tell('無法保存：瀏覽器儲存空間已滿或被停用，請先匯出紀錄。')}};
+  function stop(){clearTimeout(timer);timer=null}
+  function beep(){if(!sound)return;try{const audio=new AudioContext(),osc=audio.createOscillator(),gain=audio.createGain();gain.gain.value=.025;osc.frequency.value=450;osc.connect(gain).connect(audio.destination);osc.start();osc.stop(audio.currentTime+.06);osc.onended=()=>audio.close()}catch{}}
+  document.querySelector('#sound').onclick=e=>{sound=!sound;e.target.textContent=`音效 ${sound?'開':'關'}`;e.target.setAttribute('aria-pressed',String(sound));beep()};
+  document.querySelector('#rulesButton').onclick=()=>document.querySelector('#rules').showModal();
+  document.querySelector('#closeRules').onclick=()=>document.querySelector('#rules').close();
+  document.querySelector('#profileButton').onclick=()=>profile?showProfile():home();
+  document.querySelector('#brand').onclick=()=>{stop();paused=true;home()};
+  function home(){
+    stop();app.replaceChildren();
+    const section=el('section',undefined,'home'),intro=el('div');
+    intro.append(el('p','ONE PLAYER · THREE COMPUTERS','eyebrow'),el('h1','純粹麻將'),el('p','一個人，也能好好打一局。','tagline'));
+    const art=el('div',undefined,'hero-tiles');[0,36,72,124].forEach(id=>art.append(tile(id)));intro.append(art,el('p','台灣十六張 ／ 單機練習 ／ 無需網路','caption'));
+    section.append(intro);
+    {
+      const panel=el('div',undefined,'panel');panel.append(el('h2',`${profile.nickname}，入席。`),el('p','你與三位電腦玩家一起練習。電腦僅依自己的手牌與公開資訊行動。','caption'));
+      const actions=el('div',undefined,'actions');
+      const saved=profiles.restore(profile.id);
+      if(saved)actions.append(button('繼續牌局',()=>{try{session=saved;if(session.game)session.game=Object.assign(Object.create(Game.prototype),session.game);selected=null;paused=false;render();pump()}catch{tell('存檔無法恢復，請開始新場次')}}));
+      actions.append(button(saved?'開始新場次':'開始單機遊戲',()=>{if(saved){const dialog=document.querySelector('#newGame');dialog.showModal()}else newGame()}),button('我的個人檔案',showProfile,'quiet'));
+      panel.append(actions,el('p','個人檔案保存在這個瀏覽器，不會傳送至網路。請定期匯出紀錄；清除瀏覽器資料會遺失存檔。','caption'));section.append(panel);
+    }
+    app.append(section);
+  }
+  function newGame(){stop();session={id:crypto.randomUUID(),handNumber:1,dealer:0,roundWind:0,streak:0,scores:[1000,1000,1000,1000],ended:false,completed:false};deal()}
+  function deal(){session.game=new Game(localShuffle(),session);session.completed=false;selected=null;paused=false;save();render();pump()}
+  function pump(){
+    stop();if(!session||paused||session.ended)return;
+    const g=session.game;if(g.phase==='ended'){settle();render();return}
+    let who=-1;
+    if(g.phase==='response'){for(let i=1;i<4;i++)if(g.view(i).options.length){who=i;break}}
+    else if(g.turn!==0)who=g.turn;
+    if(who<0)return;
+    timer=setTimeout(()=>{timer=null;if(paused)return;const action=chooseAction(g.view(who),who);if(!action){tell('電腦沒有合法行動，已暫停。');paused=true;render();return}act(who,action)},delay);
+  }
+  function act(who,action){
+    try{session.game.act(who,action,session.game.seq);selected=null;beep();if(session.game.phase==='ended')settle();else save();render();pump()}
+    catch(error){paused=true;stop();tell(`操作暫停：${error.message}`);render()}
+  }
+  function settle(){
+    if(session.completed)return;
+    const r=session.game.result;session.scores=session.scores.map((score,i)=>score+r.delta[i]);session.completed=true;
+    try{profiles.finish(profile.id,`${session.id}/${session.handNumber}`,r,session);profile=profiles.public(profile.id)}catch{tell('本局已結束，但紀錄無法保存，請先匯出備份。')}
+  }
+  function next(){
+    const result=session.game.result;
+    if(result.draw||result.winner===session.dealer)session.streak++;
+    else {session.streak=0;session.dealer=(session.dealer+1)%4;if(session.dealer===0)session.roundWind++}
+    if(session.roundWind>=2){session.ended=true;save();render();return}
+    session.handNumber++;deal();
+  }
+  function render(){
+    app.replaceChildren();if(!session)return home();
+    if(session.ended||session.game.phase==='ended')return resultView();
+    const g=session.game.view(0),wrap=el('section',undefined,'table-wrap');
+    const head=el('div',undefined,'table-head');head.append(el('span',`${['東','南'][session.roundWind]}風圈 · 第 ${session.handNumber} 局 · 連莊 ${session.streak}`),el('span',`單機練習 · 剩餘 ${g.remaining} 張`));
+    const controls=el('div',undefined,'actions');controls.append(button(paused?'繼續':'暫停',()=>{paused=!paused;render();pump()},'quiet'),button(delay===650?'電腦速度：正常':'電腦速度：快速',()=>{delay=delay===650?180:650;render();pump()},'quiet'),button('保存並回首頁',()=>{save();paused=true;home()},'quiet'));head.append(controls);wrap.append(head);
+    if(paused)wrap.append(el('p','已暫停，可以先休息一下。','notice'));
+    const board=el('div',undefined,'table');
+    for(let i=0;i<4;i++){
+      const p=g.players[i],card=el('div',undefined,`player ${['south','east','north','west'][i]}${g.turn===i?' active':''}`);
+      card.append(el('div',`${['東','南','西','北'][(i-session.dealer+4)%4]} · ${names()[i]}${i===session.dealer?' 莊':''} ／ ${session.scores[i]} 分`,'player-name'));
+      if(i===0){const hand=el('div',undefined,'hand');for(const id of p.hand){const b=button('',()=>{selected=id;render()},`tile${selected===id?' selected':''}`);b.append(tile(id));b.setAttribute('aria-label',label(id));b.setAttribute('aria-pressed',String(selected===id));hand.append(b)}card.append(hand)}
+      else{const backs=el('div',undefined,'backs');for(let n=0;n<p.count;n++)backs.append(tile(0,true));card.append(backs)}
+      const publicTiles=el('div',undefined,'tiles');for(const meld of p.melds){const group=el('span',undefined,'meld');for(let n=0;n<(meld.tiles?.length??meld.count);n++)group.append(tile(meld.tiles?.[n]??0,!meld.tiles));publicTiles.append(group)}for(const f of p.flowers)publicTiles.append(tile(f));card.append(publicTiles);board.append(card);
+    }
+    const center=el('div',undefined,'center');center.append(el('div',g.pending?`等待吃碰槓胡 · ${label(g.pending.tile)}`:g.turn===0?'輪到你出牌':`${names()[g.turn]} 思考中`,'center-label'));
+    for(let i=0;i<4;i++){const river=el('div',undefined,'river');river.setAttribute('aria-label',`${names()[i]} 的牌河`);const tag=el('span',names()[i],'river-label');river.append(tag);g.players[i].river.forEach(id=>river.append(tile(id)));center.append(river)}board.append(center);wrap.append(board);
+    const actions=el('div',undefined,'game-actions'),labels={discard:'打出',win:'胡牌',closedKong:'暗槓',addedKong:'補槓',kong:'明槓',pong:'碰',chi:'吃',pass:'過'};
+    for(const action of g.options){const text=action.type==='discard'?(g.players[0].hand.includes(selected)?`打出 ${label(selected)}`:'選擇一張牌，再按打出'):labels[action.type]+(action.tiles?' '+action.tiles.map(label).join(' '):'');const b=button(text,()=>act(0,action.type==='discard'?{type:'discard',tile:selected}:action));b.disabled=paused||(action.type==='discard'&&!g.players[0].hand.includes(selected));actions.append(b)}
+    if(!g.options.length)actions.append(el('span',g.pending?'其他玩家正在回應…':'等待電腦玩家…','caption'));
+    wrap.append(actions,el('p','點選手牌後再按「打出」。三位對手均為電腦，單機沒有操作倒數。','solo-hint'));app.append(wrap);
+  }
+  function resultView(){
+    const r=session.game.result,box=el('section',undefined,'lobby result');
+    box.append(el('p','SINGLE PLAYER · LOCAL RECORD','eyebrow'),el('h2',session.ended?'本場結束':r.draw?'本局流局':`${names()[r.winner]} ${r.from===null?'自摸':'胡牌'}`));
+    if(!session.ended&&!r.draw){box.append(el('p',r.lines.map(line=>`${line.name} ${line.tai}台`).join(' ／ ')),el('h2',`共 ${r.tai} 台`));const hand=el('div',undefined,'result-hand');for(const id of r.hand)hand.append(tile(id));for(const meld of session.game.players[r.winner].melds)for(const id of meld.tiles)hand.append(tile(id));box.append(hand)}
+    const table=el('table'),header=el('tr');['名次','玩家','總分','本局'].forEach(text=>header.append(el('th',text)));table.append(header);
+    const order=[0,1,2,3].sort((a,b)=>session.scores[b]-session.scores[a]||a-b);
+    order.forEach((who,index)=>{const row=el('tr');[String(index+1),names()[who],String(session.scores[who]),String(r.delta[who])].forEach(text=>row.append(el('td',text)));table.append(row)});box.append(table);
+    const actions=el('div',undefined,'actions');if(!session.ended)actions.append(button('下一局',next));else actions.append(button('再開一場',()=>document.querySelector('#newGame').showModal()));actions.append(button('我的紀錄',showProfile,'quiet'),button('保存並回首頁',()=>{save();home()},'quiet'));box.append(actions);app.append(box);
+  }
+  function showProfile(){
+    const wasPaused=paused;stop();paused=true;
+    const p=profiles.public(profile.id),dialog=el('dialog',undefined,'profile-dialog');dialog.append(el('h2',p.nickname),el('p','免登入 · 紀錄僅保存在此瀏覽器','caption'));
+    const stats=el('div',undefined,'profile-stats');for(const [text,value] of [['完成局數',p.stats.hands],['胡牌',p.stats.wins],['自摸',p.stats.selfDraws],['放槍',p.stats.dealtIn],['流局',p.stats.draws],['累計得分',p.stats.totalDelta]]){const item=el('div');item.append(el('strong',String(value)),el('span',text));stats.append(item)}dialog.append(stats);
+    const history=el('div',undefined,'profile-history');history.append(el('h3','最近 30 局'));if(!p.history.length)history.append(el('p','完成第一局，就會留下紀錄。','caption'));for(const row of p.history.slice(0,30))history.append(el('p',`${new Date(row.endedAt).toLocaleString('zh-TW')} · ${row.outcome} · ${row.delta>0?'+':''}${row.delta} 分`));dialog.append(history);
+    const actions=el('div',undefined,'actions');actions.append(button('匯出個人紀錄',()=>{const blob=new Blob([JSON.stringify(profiles.export(profile.id),null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),link=el('a');link.href=url;link.download=`PURE_MAHJONG_${p.username}_record.json`;link.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}),button('關閉',()=>dialog.close(),'quiet'));dialog.append(actions,el('p','匯出不包含密碼、密碼雜湊或牌局私人存檔。此檔案是單機紀錄，未經伺服器驗證。','caption'));
+    dialog.addEventListener('close',()=>{dialog.remove();paused=wasPaused;if(session&&app.querySelector('.table')){render();pump()}},{once:true});document.body.append(dialog);dialog.showModal();
+  }
+  document.querySelector('#cancelNew').onclick=()=>document.querySelector('#newGame').close();
+  document.querySelector('#confirmNew').onclick=()=>{document.querySelector('#newGame').close();newGame()};
+  let storage;try{storage=localStorage}catch{storage={getItem:()=>null,setItem:()=>{throw Error('storage unavailable')}}}
+  profiles=new GuestProfiles(storage);profile=profiles.public();
+  const saved=profiles.restore();
+  if(saved){try{session=saved;session.game=Object.assign(Object.create(Game.prototype),session.game);render();pump()}catch{newGame()}}else newGame();
+  if(profiles.temporary)tell('目前為暫存模式，仍可遊玩；關閉頁面後可能不保留紀錄。');
+})();
+</script></body></html>
