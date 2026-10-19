@@ -197,7 +197,8 @@ return {Game,svg,label,chooseAction,localShuffle,GuestProfiles,wallLayout,drawPr
   const tell=text=>{status.textContent=text;clearTimeout(tell.timer);tell.timer=setTimeout(()=>status.textContent='',6000)};
   const tile=(id,back=false)=>{const wrap=el('span');wrap.innerHTML=svg(id,back);return wrap.firstElementChild};
   const save=()=>{try{profiles.save(profile.id,session)}catch{tell('無法保存：瀏覽器儲存空間已滿或被停用，請先匯出紀錄。')}};
-  let opening=null,openingTimer=null;
+  let opening=null,openingTimer=null,motionMode=null;
+  const motionEnabled=()=>motionMode??!matchMedia('(prefers-reduced-motion: reduce)').matches;
   function cancelOpening(){clearTimeout(openingTimer);openingTimer=null;opening=null}
   function finishOpening(){cancelOpening();render();pump()}
   function scheduleFrame(){
@@ -215,14 +216,14 @@ return {Game,svg,label,chooseAction,localShuffle,GuestProfiles,wallLayout,drawPr
   function beginOpening(resume=false,force=false){
     stop();cancelOpening();
     const trace=resume?null:session.game.dealEvents??new Game(session.game.initialWall,session.game).dealEvents;
-    opening={stage:resume?2:0,resume,force,index:0,frames:!resume&&trace?drawPresentation(session.game,trace,true):null};
-    if(!force&&matchMedia('(prefers-reduced-motion: reduce)').matches){finishOpening();return}
+    opening={stage:resume?2:0,resume,force:force||motionMode===true,index:0,frames:!resume&&trace?drawPresentation(session.game,trace,true):null};
+    if(!force&&!motionEnabled()){finishOpening();return}
     render();scheduleFrame();
   }
   function animateDraws(){
     const events=session.game.drawEvents;
-    if(!events?.length||matchMedia('(prefers-reduced-motion: reduce)').matches){render();pump();return}
-    stop();cancelOpening();opening={stage:2,index:0,live:true,frames:drawPresentation(session.game,events)};render();scheduleFrame();
+    if(!events?.length||!motionEnabled()){render();pump();return}
+    stop();cancelOpening();opening={stage:2,index:0,live:true,force:motionMode===true,frames:drawPresentation(session.game,events)};render();scheduleFrame();
   }
   function wallElement(layout){
     const frame=el('div',undefined,'wall-frame');frame.setAttribute('aria-label',`桌面牌牆，共 ${layout.flat(2).filter(Boolean).length} 張`);
@@ -301,7 +302,7 @@ return {Game,svg,label,chooseAction,localShuffle,GuestProfiles,wallLayout,drawPr
     if(session.ended||session.game.phase==='ended')return resultView();
     const g=opening?.frames?opening.frames[opening.stage<2?0:opening.index].view:session.game.view(0),wrap=el('section',undefined,'table-wrap');
     const head=el('div',undefined,'table-head');head.append(el('span',`${['東','南'][session.roundWind]}風圈 · 第 ${session.handNumber} 局 · 連莊 ${session.streak}`),el('span',`單機練習 · 剩餘 ${g.remaining} 張`));
-    const controls=el('div',undefined,'actions');controls.append(button('重播開局動畫',()=>beginOpening(false,true),'quiet'),button(paused?'繼續':'暫停',()=>{paused=!paused;render();pump()},'quiet'),button(delay===650?'電腦速度：正常':'電腦速度：快速',()=>{delay=delay===650?180:650;render();pump()},'quiet'),button('保存並回首頁',()=>{save();paused=true;home()},'quiet'));head.append(controls);wrap.append(head);
+    const controls=el('div',undefined,'actions');controls.append(button(motionEnabled()?'動畫：開':'動畫：關',()=>{motionMode=!motionEnabled();try{storage.setItem('pure-mahjong-motion-v1',motionMode?'on':'off')}catch{}render()},'quiet'),button('重播開局動畫',()=>beginOpening(false,true),'quiet'),button(paused?'繼續':'暫停',()=>{paused=!paused;render();pump()},'quiet'),button(delay===650?'電腦速度：正常':'電腦速度：快速',()=>{delay=delay===650?180:650;render();pump()},'quiet'),button('保存並回首頁',()=>{save();paused=true;home()},'quiet'));head.append(controls);wrap.append(head);
     if(paused)wrap.append(el('p','已暫停，可以先休息一下。','notice'));
     const board=el('div',undefined,'table');
     for(let i=0;i<4;i++){
@@ -339,6 +340,7 @@ return {Game,svg,label,chooseAction,localShuffle,GuestProfiles,wallLayout,drawPr
   document.querySelector('#cancelNew').onclick=()=>document.querySelector('#newGame').close();
   document.querySelector('#confirmNew').onclick=()=>{document.querySelector('#newGame').close();newGame()};
   let storage;try{storage=localStorage}catch{storage={getItem:()=>null,setItem:()=>{throw Error('storage unavailable')}}}
+  try{const mode=storage.getItem('pure-mahjong-motion-v1');motionMode=mode===null?null:mode==='on'}catch{}
   profiles=new GuestProfiles(storage);profile=profiles.public();
   const saved=profiles.restore();
   if(saved){try{session=saved;session.game=Object.assign(Object.create(Game.prototype),session.game);beginOpening(true)}catch{newGame()}}else newGame();
