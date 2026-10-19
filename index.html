@@ -156,9 +156,9 @@ return {Game,svg,label,chooseAction,localShuffle,GuestProfiles,wallLayout};})();
   let opening=null,openingTimer=null;
   function cancelOpening(){clearTimeout(openingTimer);openingTimer=null;opening=null}
   function finishOpening(){cancelOpening();render();pump()}
-  function beginOpening(resume=false){
+  function beginOpening(resume=false,force=false){
     stop();cancelOpening();opening={stage:resume?2:0,resume};render();
-    if(matchMedia('(prefers-reduced-motion: reduce)').matches){finishOpening();return}
+    if(!force&&matchMedia('(prefers-reduced-motion: reduce)').matches){finishOpening();return}
     function advance(){if(!opening)return;if(opening.stage>=2){finishOpening();return}opening.stage++;render();openingTimer=setTimeout(advance,900)}
     openingTimer=setTimeout(advance,resume?1000:1100);
   }
@@ -230,7 +230,7 @@ return {Game,svg,label,chooseAction,localShuffle,GuestProfiles,wallLayout};})();
     if(session.ended||session.game.phase==='ended')return resultView();
     const g=session.game.view(0),wrap=el('section',undefined,'table-wrap');
     const head=el('div',undefined,'table-head');head.append(el('span',`${['東','南'][session.roundWind]}風圈 · 第 ${session.handNumber} 局 · 連莊 ${session.streak}`),el('span',`單機練習 · 剩餘 ${g.remaining} 張`));
-    const controls=el('div',undefined,'actions');controls.append(button(paused?'繼續':'暫停',()=>{paused=!paused;render();pump()},'quiet'),button(delay===650?'電腦速度：正常':'電腦速度：快速',()=>{delay=delay===650?180:650;render();pump()},'quiet'),button('保存並回首頁',()=>{save();paused=true;home()},'quiet'));head.append(controls);wrap.append(head);
+    const controls=el('div',undefined,'actions');controls.append(button('重播開局動畫',()=>beginOpening(false,true),'quiet'),button(paused?'繼續':'暫停',()=>{paused=!paused;render();pump()},'quiet'),button(delay===650?'電腦速度：正常':'電腦速度：快速',()=>{delay=delay===650?180:650;render();pump()},'quiet'),button('保存並回首頁',()=>{save();paused=true;home()},'quiet'));head.append(controls);wrap.append(head);
     if(paused)wrap.append(el('p','已暫停，可以先休息一下。','notice'));
     const board=el('div',undefined,'table');
     for(let i=0;i<4;i++){
