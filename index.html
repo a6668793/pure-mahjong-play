@@ -11,6 +11,8 @@ header{border-color:#b7bab366;padding:25px 4vw}.brand{letter-spacing:4px;font-we
 @media(max-width:500px){.table{grid-template-columns:45px minmax(0,1fr) 45px}.wall-stack{width:5px}.wall-east .wall-stack,.wall-west .wall-stack{height:5px}.hand{overflow-x:auto;justify-content:flex-start;padding-top:16px}.tile{flex:0 0 34px}.table-head{gap:7px}.table-head button{font-size:10px;padding:7px}.center{padding:35px 20px;gap:6px}.center-label{font-size:10px;letter-spacing:1px}.flying-tile.to-1{--dx:120px}.flying-tile.to-3{--dx:-120px}.opening-brand{letter-spacing:3px}.river svg{width:16px}}
 @media(max-height:600px) and (orientation:landscape){header{padding:9px 20px}.table-wrap{padding:4px 12px}.table{min-height:380px;grid-template-rows:65px minmax(180px,1fr) 95px;padding:6px;gap:5px}.center{padding:32px 24px}.river{min-height:50px}.wall-east .wall-stack,.wall-west .wall-stack{height:7px}.wall-stack{width:8px}.hand{padding-top:8px}.tile{flex-basis:37px}.flying-tile.to-0{--dy:120px}.flying-tile.to-2{--dy:-120px}.dealing-scene .deal-caption{font-size:10px}.opening-brand svg{width:32px}.shuffle-art{height:150px;transform:scale(.7);margin:-5px}.opening-caption{margin:0}.table-head{margin-bottom:7px}.table-head>span{font-size:10px}}
 @media(prefers-reduced-motion:reduce){.dealing-scene:not(.force-motion) *{animation:none!important}}
+
+@media(min-width:761px) and (max-height:850px){header{padding:17px 4vw}.table-wrap{padding-top:8px;padding-bottom:4px}.table-head{margin:4px 0 11px}.table{min-height:465px;grid-template-rows:65px minmax(215px,1fr) 102px;gap:6px;padding:10px}.center{padding:30px 26px;gap:6px}.center-label{margin:2px 0 6px}.river{min-height:58px}.wall-east .wall-stack,.wall-west .wall-stack{height:10px}.hand{padding-top:9px;margin:0 auto 5px}.tile{flex-basis:48px}.player-name{font-size:10px}.tiles svg{width:20px}.backs svg{width:15px}.game-actions{margin:12px 0}.solo-hint{margin:6px 0}footer{padding:12px 4vw}.flying-tile.to-0{--dy:130px}.flying-tile.to-2{--dy:-130px}.shuffle-art{height:180px;margin:0}.opening-caption{margin:4px 0}}
 </style></head><body><header><a id="brand" class="brand" role="button" tabindex="0">PURE MAHJONG <span>純粹麻將 · 單機版</span></a><button id="rulesButton" class="quiet">規則</button><button id="sound" class="quiet" aria-pressed="false">音效 關</button><button id="profileButton" class="quiet">遊玩紀錄</button></header><main id="app"></main><p id="message" role="status" aria-live="polite"></p><footer>一個人，也能好好打一局。<span>0.4.0 · 你＋三位電腦 · 單機紀錄</span></footer><dialog id="rules"><h2>單機台灣十六張</h2><p>你控制下方手牌，三位電腦玩家操作其餘三席。電腦只看自己的手牌與公開資訊。沒有真人配對、多人連線或操作倒數。</p><p>五面子一對將；最低一台。底分10、每台10，自摸三家各付，放槍單家支付。莊胡與流局連莊，東南兩圈後結束。</p><p>胡優先於碰槓，碰槓優先於吃；同張單胡，由下家起最近者優先。暗槓不破門清；只可搶補槓。花牌自動補牌。</p><p>平胡採五順、數牌將、無花的本遊戲標準；其餘台型沿用原始碼 docs/RULES.md。此為單機練習測試版。</p><p>所有資料僅保存在此瀏覽器。清除瀏覽器資料會遺失；不需要註冊或登入，遊玩紀錄僅保存在此瀏覽器，不會自動同步雲端。</p><button id="closeRules">知道了</button></dialog><dialog id="newGame"><h2>開始新場次？</h2><p>目前場次將被新場次取代，已完成的個人紀錄會保留。</p><div class="actions"><button id="confirmNew">開始新場次</button><button id="cancelNew">繼續原場次</button></div></dialog><script>const Engine=(()=>{const faces = Array.from({length:34},(_,i)=>i);
 const kind = id => Math.floor(id/4);
 const flower = id => id>=136;
@@ -201,7 +203,7 @@ return {Game,svg,label,chooseAction,localShuffle,GuestProfiles,wallLayout,drawPr
   function scheduleFrame(){
     if(!opening)return;
     const frame=opening.frames?.[opening.index];
-    const wait=opening.stage<2?850:opening.resume?700:frame?.event?.flower?650:opening.live?430:95;
+    const wait=opening.stage<2?850:opening.resume?700:frame?.event?.flower?650:opening.live?430:140;
     openingTimer=setTimeout(()=>{
       if(!opening)return;
       if(opening.stage<2)opening.stage++;
@@ -233,7 +235,7 @@ return {Game,svg,label,chooseAction,localShuffle,GuestProfiles,wallLayout,drawPr
       box.setAttribute('role','status');
       const title=opening.resume?'牌桌已備妥・繼續上一局':!event?'發牌開始・四家依序取牌':`${names()[event.seat]}・${event.flower?'亮花・準備補花':event.source==='tail'?'牌尾補牌':'摸牌入手'}`;
       box.append(el('p',title,'deal-caption'));
-      if(event){const flight=el('div',undefined,`flying-tile from-${event.sourceSide} to-${event.seat}${event.flower?' is-flower':''}`);flight.append(tile(event.face??0,event.face===null));flight.setAttribute('aria-hidden','true');box.append(flight)}
+      if(event){const flight=el('div',undefined,`flying-tile from-${event.sourceSide} to-${event.seat}${event.flower?' is-flower':''}`);flight.style.animationDuration=event.flower?'.6s':opening.live?'.4s':'.13s';flight.append(tile(event.face??0,event.face===null));flight.setAttribute('aria-hidden','true');box.append(flight)}
       if(opening.frames){const progress=el('progress');progress.max=opening.frames.length-1;progress.value=opening.index;progress.setAttribute('aria-label',opening.live?'補牌進度':'發牌與補花進度');box.append(progress)}
       box.append(button('略過動畫',finishOpening,'quiet'));return box;
     }
