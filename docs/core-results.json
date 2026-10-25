@@ -1,0 +1,16 @@
+{
+  "games": 100,
+  "wins": 93,
+  "draws": 7,
+  "actions": {
+    "discard": 5649,
+    "chi": 794,
+    "pong": 630,
+    "addedKong": 39,
+    "closedKong": 9,
+    "win": 94,
+    "kong": 47
+  },
+  "protectedEngineAndStorage": "identical",
+  "rankCount": 20
+}
