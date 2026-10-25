@@ -96,7 +96,242 @@ header .brand>span{font-size:inherit;color:inherit}
 .life-identity{display:flex;align-items:center;gap:10px;margin:10px 0}.life-identity .portrait{width:38px;height:38px}
 
 .account-dialog{width:min(470px,92vw);box-sizing:border-box}.account-dialog input{background:#faf8f1;color:#222522;border-color:#b9a07588}.account-dialog form>button{margin:6px 8px 6px 0}.account-dialog h2{font-size:24px}#accountButton{white-space:nowrap;font-size:12px}
-</style></head><body><header><a id="brand" class="brand" role="button" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-label="純粹麻將品牌標誌"><rect x="34" y="13" width="96" height="132" rx="18" fill="#F3EEE4" stroke="#21483E" stroke-width="6"/><path d="M57 20Q43 20 43 36V63M43 112v12q0 13 14 13h51" fill="none" stroke="#21483E" stroke-width="1.6"/><circle cx="105" cy="45" r="12" fill="#C75C4B"/><path d="M5 105C35 70 72 51 91 66c19 15-10 30-8 39 3 18 45 6 72-13-23 31-59 48-80 32-21-15-2-35 3-41C57 77 26 92 5 105Z" fill="#21483E"/><g fill="none" stroke="#21483E" stroke-linecap="round"><path d="M9 96Q44 64 74 64M2 111Q29 87 51 81M16 112Q39 92 57 87M87 124q29 14 68-22M95 131q28 7 53-16" stroke-width="1.5"/><path d="M14 89Q38 68 58 64M4 119l21-20M111 135l20-9" stroke-width=".7"/></g><path d="M32 92q30-20 46-18M85 116q24 13 58-13" fill="none" stroke="#F3EEE4" stroke-width="1.2" opacity=".8"/></svg><span class="brand-wordmark"><strong>純粹麻將</strong><small>PURE MAHJONG</small></span></a><button id="rulesButton" class="quiet">規則</button><button id="sound" class="quiet" aria-pressed="false">音效 關</button><button id="music" class="quiet" aria-pressed="false">音樂 關</button><button id="accountButton" class="quiet">登入／註冊</button><button id="profileButton" class="quiet">遊玩紀錄</button><button id="settingsButton" class="quiet">設定</button></header><main id="app"></main><p id="message" role="status" aria-live="polite"></p><footer>一個人，也能好好打一局。<span>1.1.0 · 雲端帳號與麻將人生階級</span></footer><dialog id="rules"><h2>單機台灣十六張</h2><p>你控制下方手牌，三位電腦玩家操作其餘三席。電腦只看自己的手牌與公開資訊。好友房支援 1～4 位真人，空位可由房主加入電腦。</p><p>五面子一對將；最低一台。底分10、每台10，自摸三家各付，放槍單家支付。莊胡與流局連莊，東南兩圈後結束。</p><p>胡優先於碰槓，碰槓優先於吃；同張單胡，由下家起最近者優先。暗槓不破門清；只可搶補槓。花牌自動補牌。</p><p>平胡採五順、數牌將、無花的本遊戲標準；其餘台型沿用原始碼 docs/RULES.md。此為單機練習測試版。</p><p>本機單機紀錄維持瀏覽器保存。好友房的永久積分由伺服器驗證結算，含電腦補位。遊客請自行備份玩家身分，清除瀏覽器資料後需用備份恢復。</p><button id="closeRules">知道了</button></dialog><dialog id="newGame"><h2>開始新場次？</h2><p>目前場次將被新場次取代，已完成的個人紀錄會保留。</p><div class="actions"><button id="confirmNew">開始新場次</button><button id="cancelNew">繼續原場次</button></div></dialog><script>const Engine=(()=>{const RANKS=Object.freeze([
+/* Final layout layer: shared by the online and offline builds. */
+body{line-height:1.65}
+button,input,select,textarea{line-height:1.5}
+button{white-space:normal;overflow-wrap:anywhere;touch-action:manipulation}
+img,svg{max-width:100%}
+h1,h2,h3,p{overflow-wrap:anywhere}
+header{flex-wrap:wrap;gap:10px;max-width:1500px;margin:auto}
+header .brand{flex-basis:auto;min-width:0}
+header .brand .brand-wordmark{display:flex;flex-direction:column;gap:6px;margin:0;letter-spacing:0}
+header .brand-wordmark strong,header .brand-wordmark small{display:block}
+header button{min-height:42px;flex-shrink:0}
+#accountButton{max-width:240px;overflow-wrap:anywhere;white-space:normal}
+footer{flex-wrap:wrap;line-height:1.8;font-size:12px}
+.dashboard-intro>div,.guest-card>span,.feature-copy,.mode-row>span,.mode-row>div{min-width:0}
+.dashboard-intro{align-items:center;gap:28px}
+.dashboard-subtitle{font-size:14px;color:#626e5f}
+.guest-card{border-radius:18px;max-width:360px;padding:15px;gap:14px}
+.guest-card small,.guest-card .persona-english{font-size:11px!important;color:#626e5f}
+.guest-card .life-chip{margin-bottom:7px}
+.guest-card .life-chip strong{font-size:12px}
+.dash-panel{padding:24px;gap:0;min-height:0}
+.dash-panel-head{min-height:84px}
+.dash-panel-head .eyebrow{font-size:11px;letter-spacing:2px}
+.start-card{min-height:190px;flex-shrink:0;padding:24px 24px 65px}
+.start-card small{font-size:10px;letter-spacing:1px}
+.start-card strong{font-size:30px;letter-spacing:2px;margin:14px 0 9px}
+.start-card>span:first-child>span{font-size:13px;max-width:none;padding-right:12px}
+.start-art{right:4px;bottom:-26px;pointer-events:none}
+.start-art svg{width:42px}
+.start-arrow{font-size:23px;top:16px;right:15px}
+.life-practice-note{display:block;font-size:12px;line-height:1.8;margin:14px 0 10px;color:#5b6c60}
+.panel-01>.quiet:not(.new-table-link){min-height:46px;font-size:13px;padding:12px}
+.section-microtitle{font-size:12px;margin:24px 0 12px;color:#68755e}
+.mode-row{gap:10px;padding:14px 12px;min-height:80px}
+.mode-row strong{font-size:14px;letter-spacing:.5px}
+.mode-row small{font-size:12px;color:#66735d;line-height:1.7}
+.mode-status{font-size:11px;letter-spacing:0;flex-shrink:0}
+.mode-symbol{width:28px;height:34px}
+.play-foot{margin-top:24px;padding-top:18px}
+.play-foot>small,.text-button{font-size:12px;color:#5e7050}
+.panel-lead{font-size:14px;color:#5f7058}
+.preview-tag{font-size:11px;white-space:normal;line-height:1.6;letter-spacing:.5px;color:#607452}
+.friend-seats{margin:30px 0 22px;flex-wrap:wrap}
+.friend-avatar{flex:0 0 44px;width:44px;height:44px}
+.friend-description{font-size:13px;color:#637457;line-height:1.9}
+.friend-primary{font-size:14px;min-height:48px}
+.join-design{font-size:12px;color:#67755d;line-height:1.8}
+.friend-note{margin-top:24px;font-size:14px;color:#5d7050;gap:12px}
+.note-symbol{flex-shrink:0}
+.daily-design .caption,.mini-heading .preview-tag{font-size:11px;color:#657459}
+.mini-heading{flex-wrap:wrap;gap:8px}
+.mini-heading h3{font-size:15px}
+.task-design-row{font-size:12px;color:#657459;line-height:1.8}
+.empty-check{flex-shrink:0}
+.feature-design{padding:20px 16px;gap:14px}
+.feature-copy small{font-size:10px;letter-spacing:.7px;opacity:1}
+.feature-copy strong{font-size:22px;letter-spacing:1px}
+.feature-copy>span{font-size:13px;opacity:1}
+.feature-copy em{font-size:11px;opacity:1}
+.dashboard-small-cards{margin-top:10px;grid-template-columns:repeat(2,minmax(0,1fr))}
+.small-dash-card .eyebrow,.small-dash-card>span:last-child{font-size:11px;color:#657459}
+.dashboard-bottom{font-size:12px;color:#657459;line-height:1.9;flex-wrap:wrap}
+dialog{box-sizing:border-box;max-width:calc(100vw - 28px);max-height:calc(100dvh - 32px);overflow:auto;overscroll-behavior:contain;padding:28px;border-radius:16px;line-height:1.8}
+dialog h2{font-size:26px;letter-spacing:2px;line-height:1.5;margin:0 0 18px}
+dialog label{display:block;color:#425b4b;font-size:14px}
+dialog button{min-height:44px;font-size:14px}
+dialog input:not([type=checkbox]):not([type=range]),dialog textarea{font-size:16px;max-width:100%}
+dialog .actions{gap:10px}
+.account-dialog form{display:flex;flex-direction:column;gap:4px}
+.account-dialog form>button{margin:4px 0}
+.caption,.design-description{line-height:1.9}
+.setting-row{gap:18px;flex-wrap:wrap}
+.setting-row>div{flex:1 1 180px;min-width:0}
+.setting-row input[type=range]{width:150px;max-width:100%;flex:0 1 150px;margin:0}
+.setting-row small{font-size:12px;color:#66765b}
+.profile-persona>div,.avatar-preview>div,.life-identity>strong{min-width:0;overflow-wrap:anywhere}
+.avatar-filters{flex-wrap:wrap}
+.avatar-option{min-width:0;line-height:1.6}
+.avatar-option .portrait{--avatar-size:clamp(44px,8vw,76px)}
+.avatar-option small{font-size:10px;min-height:2.8em}
+.life-chip>span:last-child{min-width:0;overflow-wrap:anywhere}
+.life-badge{align-self:center}
+.life-identity .portrait{--avatar-size:38px}
+.life-board-row{grid-template-columns:24px 36px minmax(0,1fr) minmax(160px,1.2fr)}
+.life-board-row .portrait{--avatar-size:34px}
+.life-board-row>strong{min-width:0;overflow-wrap:anywhere}
+.network-entry{padding:28px;max-width:620px}
+.network-entry .hero-identity{gap:16px;flex-wrap:wrap}
+.network-entry h1{margin:0;font-size:28px;letter-spacing:2px;line-height:1.5}
+.network-entry .actions button{flex:1 1 150px;min-height:46px}
+.network-entry label{line-height:1.6}
+.online-lobby{width:100%;margin:24px auto;padding:26px}
+.online-lobby h1{font-size:clamp(26px,4vw,36px);letter-spacing:2px;line-height:1.5;margin:0 0 12px}
+.online-seat{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center}
+.online-person{min-width:0}
+.online-person>div{min-width:0;overflow-wrap:anywhere}
+.online-person strong{display:block;line-height:1.7}
+.online-person .life-chip{display:flex;margin:6px 0}
+.online-seat>button{grid-column:2;min-height:42px}
+.online-lobby button{font-size:13px;line-height:1.6}
+.table-head{flex-wrap:wrap;line-height:1.7;letter-spacing:.5px}
+.table-head>span{min-width:0;overflow-wrap:anywhere;white-space:normal}
+.table-head button{min-height:40px;white-space:normal}
+.table,.online-wrap .table{grid-template-columns:140px minmax(0,1fr) 140px;grid-template-rows:minmax(125px,auto) minmax(260px,1fr) minmax(180px,auto);min-height:620px;gap:14px;padding:18px}
+.table .player{min-width:0;max-width:100%;padding:6px 0}
+.player-identity{gap:10px;padding-bottom:10px;max-width:100%}
+.player-identity .identity-copy{min-width:0;overflow-wrap:anywhere}
+.player-identity .player-name{font-size:12px;letter-spacing:0;line-height:1.8;overflow-wrap:anywhere}
+.player-identity .persona-english{font-size:10px!important;max-width:100%;line-height:1.5}
+.identity-role{font-size:10px;letter-spacing:0;line-height:1.6}
+.player .life-chip{display:flex;justify-content:center;gap:5px;line-height:1.5}
+.player .life-chip strong{font-size:11px}
+.player .life-chip small{font-size:10px}
+.north .backs{flex-wrap:wrap;max-width:100%}
+.backs svg,.tiles svg,.meld svg{flex-shrink:0}
+.west .backs,.east .backs{max-width:100%;gap:2px}
+.center{padding:38px 26px;gap:12px}
+.center-label{font-size:13px;letter-spacing:.5px;line-height:1.8;overflow-wrap:anywhere}
+.shared-river{min-width:0;min-height:160px;max-height:240px;grid-template-columns:repeat(auto-fill,minmax(30px,1fr))}
+.shared-river .river-tile,.shared-river .river-tile svg{width:30px}
+.hand-rack{padding:12px 6px 6px;gap:16px}
+.hand-rack .hand{overflow-x:auto;overflow-y:hidden;padding:16px 0 8px;min-width:0;scrollbar-width:thin}
+.hand-rack .hand .tile{flex-shrink:0;width:44px;flex-basis:44px;max-width:44px}
+.hand-rack .drawn-slot{flex:0 0 44px;width:44px;padding-left:10px;margin-bottom:8px}
+.drawn-slot .tile{width:44px}
+.drawn-label{left:10px;font-size:11px;letter-spacing:1px}
+.south .tiles{padding-top:4px}
+.game-actions button{min-height:44px;font-size:14px;max-width:100%}
+.solo-hint{font-size:12px;line-height:1.8}
+.result{padding:24px;max-width:880px}
+.result table{table-layout:fixed}
+.result td,.result th{overflow-wrap:anywhere;font-size:13px}
+.result td:nth-child(2),.result th:nth-child(2){width:40%}
+.result-player{flex-wrap:wrap}
+#message{width:max-content;max-width:calc(100vw - 32px);bottom:max(16px,env(safe-area-inset-bottom));font-size:14px;line-height:1.7}
+@media(max-width:1100px){
+  header .brand{flex-basis:100%}
+  .dashboard-columns{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+  .panel-01{grid-column:1;grid-row:1/3}
+  .panel-02,.panel-03{grid-column:2;grid-row:auto}
+  .dashboard-intro{align-items:flex-start;flex-wrap:wrap}
+  .table,.online-wrap .table{grid-template-columns:105px minmax(0,1fr) 105px}
+}
+@media(max-width:700px){
+  header{padding:16px;gap:8px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
+  header .brand{grid-column:1/-1;margin:0 0 8px}
+  header button{padding:9px 5px;font-size:12px;min-width:0}
+  #accountButton{max-width:none}
+  .dashboard{padding:24px 16px}
+  .dashboard-intro{display:block;margin-bottom:24px}
+  .hero-identity{gap:12px}
+  .hero-identity>svg{width:80px;height:80px}
+  .hero-identity .brand-wordmark strong{font-size:30px;letter-spacing:5px}
+  .hero-identity .brand-wordmark small{font-size:10px;letter-spacing:2px}
+  .dashboard h1{max-width:none;font-size:26px;letter-spacing:1px}
+  .guest-card{width:100%;max-width:none;margin-top:20px}
+  .dashboard-columns{grid-template-columns:minmax(0,1fr);gap:20px}
+  .dash-panel{grid-column:auto;grid-row:auto;padding:22px}
+  .start-card{padding:22px 20px 65px}
+  .feature-copy strong{font-size:21px}
+  .profile-stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .profile-stats>div{padding:12px 8px;min-width:0;overflow-wrap:anywhere}
+  dialog{padding:22px;max-height:calc(100dvh - 24px)}
+  dialog h2{font-size:23px;letter-spacing:1px}
+  .life-board-row{grid-template-columns:20px 30px minmax(0,1fr);gap:8px}
+  .life-board-row .portrait{--avatar-size:28px}
+  .life-board-row>.life-chip{grid-column:3;justify-content:flex-start}
+  .network-entry{margin:20px auto;padding:20px}
+  .network-entry .hero-identity svg{width:60px;height:60px}
+  .network-entry h1{font-size:25px;letter-spacing:1px}
+  .online-lobby{padding:20px}
+  .online-seat{grid-template-columns:minmax(0,1fr);gap:8px}
+  .online-seat>span,.online-seat>button{grid-column:1;justify-self:start}
+  .online-seat>span{padding-left:58px}
+  .table-wrap{padding:10px}
+  .table-head .actions{flex-wrap:wrap}
+  .table,.online-wrap .table{grid-template-columns:64px minmax(0,1fr) 64px;grid-template-rows:minmax(130px,auto) minmax(270px,1fr) minmax(185px,auto);gap:7px;padding:8px;min-height:0}
+  .table:after{font-size:7px;letter-spacing:0;left:8px;top:8px}
+  .player-identity{gap:6px}
+  .player-identity .player-name{font-size:11px;line-height:1.6}
+  .player-identity .persona-english{font-size:9px!important;max-width:100%}
+  .player .life-chip{flex-wrap:wrap}
+  .player .life-chip strong,.player .life-chip small{font-size:10px}
+  .east .player-identity,.west .player-identity{gap:5px}
+  .center{padding:34px 14px;gap:8px}
+  .center-label{font-size:11px;line-height:1.7}
+  .shared-river{grid-template-columns:repeat(auto-fill,minmax(23px,1fr));gap:4px;padding:6px;min-height:155px;max-height:230px}
+  .shared-river .river-tile,.shared-river .river-tile svg{width:23px}
+  .river-empty{padding:30px 0;line-height:1.8}
+  .backs svg{width:12px}
+  .tiles svg,.meld svg{width:19px}
+  .hand-rack{gap:10px;padding:6px 2px}
+  .hand-rack .hand{flex:1 1 auto;justify-content:flex-start;padding:16px 0 8px;min-height:0}
+  .hand-rack .hand .tile{flex:0 0 38px;width:38px;max-width:38px}
+  .hand-rack .drawn-slot{flex-basis:38px;width:38px;padding-left:8px}
+  .drawn-slot .tile{width:38px}
+  .drawn-label{left:8px;font-size:10px}
+  .wall-stack{width:clamp(3px,.8vw,6px)}
+  .wall-east .wall-stack,.wall-west .wall-stack{width:12px;height:5px}
+  .game-actions{gap:8px}
+  .game-actions button{min-width:100px;padding:10px 14px}
+  .result{padding:16px}
+  .result td,.result th{padding:10px 4px;font-size:12px}
+}
+@media(max-width:360px){
+  .dash-panel{padding:18px}
+  .mode-row{flex-wrap:wrap;gap:8px}
+  .mode-status{margin-left:38px}
+  .hero-identity .brand-wordmark strong{font-size:26px;letter-spacing:3px}
+  .hero-identity>svg{width:65px;height:65px}
+  .table,.online-wrap .table{grid-template-columns:55px minmax(0,1fr) 55px}
+  .feature-design{padding:16px 12px;gap:10px}
+  .avatar-dialog{padding:16px}
+  .avatar-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media(max-height:600px) and (orientation:landscape){
+  header{display:flex;padding:8px 16px;gap:7px}
+  header .brand{flex-basis:auto;grid-column:auto;margin:0 auto 0 0}
+  header .brand>svg{width:36px;height:36px}
+  header .brand-wordmark strong{font-size:17px;letter-spacing:2px}
+  header .brand-wordmark small{font-size:8px;letter-spacing:1px}
+  header button{min-height:36px;font-size:11px;padding:7px}
+  .table-head{flex-wrap:wrap}
+  .table-head .actions{flex-wrap:wrap}
+  .table,.online-wrap .table{grid-template-columns:95px minmax(0,1fr) 95px;grid-template-rows:minmax(100px,auto) minmax(160px,1fr) minmax(165px,auto);min-height:0;gap:8px;padding:10px}
+  .center{padding:24px 18px}
+  .shared-river{min-height:95px;max-height:140px}
+  .hand-rack .hand{flex:1 1 auto;overflow-x:auto;overflow-y:hidden;padding:16px 0 8px}
+  .hand-rack .hand .tile{flex:0 0 38px;width:38px}
+  .hand-rack .drawn-slot{margin-bottom:8px}
+  .avatar-preview{float:none;width:auto;flex-direction:row}
+}
+@media(hover:none){button:hover{transform:none}}
+@media(prefers-reduced-motion:reduce){button{transition:none}}
+
+</style></head><body><header><a id="brand" class="brand" role="button" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-label="純粹麻將品牌標誌"><rect x="34" y="13" width="96" height="132" rx="18" fill="#F3EEE4" stroke="#21483E" stroke-width="6"/><path d="M57 20Q43 20 43 36V63M43 112v12q0 13 14 13h51" fill="none" stroke="#21483E" stroke-width="1.6"/><circle cx="105" cy="45" r="12" fill="#C75C4B"/><path d="M5 105C35 70 72 51 91 66c19 15-10 30-8 39 3 18 45 6 72-13-23 31-59 48-80 32-21-15-2-35 3-41C57 77 26 92 5 105Z" fill="#21483E"/><g fill="none" stroke="#21483E" stroke-linecap="round"><path d="M9 96Q44 64 74 64M2 111Q29 87 51 81M16 112Q39 92 57 87M87 124q29 14 68-22M95 131q28 7 53-16" stroke-width="1.5"/><path d="M14 89Q38 68 58 64M4 119l21-20M111 135l20-9" stroke-width=".7"/></g><path d="M32 92q30-20 46-18M85 116q24 13 58-13" fill="none" stroke="#F3EEE4" stroke-width="1.2" opacity=".8"/></svg><span class="brand-wordmark"><strong>純粹麻將</strong><small>PURE MAHJONG</small></span></a><button id="rulesButton" class="quiet">規則</button><button id="sound" class="quiet" aria-pressed="false">音效 關</button><button id="music" class="quiet" aria-pressed="false">音樂 關</button><button id="accountButton" class="quiet">登入／註冊</button><button id="profileButton" class="quiet">遊玩紀錄</button><button id="settingsButton" class="quiet">設定</button></header><main id="app"></main><p id="message" role="status" aria-live="polite"></p><footer>一個人，也能好好打一局。<span>1.1.1 · 排版與閱讀體驗優化</span></footer><dialog id="rules"><h2>單機台灣十六張</h2><p>你控制下方手牌，三位電腦玩家操作其餘三席。電腦只看自己的手牌與公開資訊。好友房支援 1～4 位真人，空位可由房主加入電腦。</p><p>五面子一對將；最低一台。底分10、每台10，自摸三家各付，放槍單家支付。莊胡與流局連莊，東南兩圈後結束。</p><p>胡優先於碰槓，碰槓優先於吃；同張單胡，由下家起最近者優先。暗槓不破門清；只可搶補槓。花牌自動補牌。</p><p>平胡採五順、數牌將、無花的本遊戲標準；其餘台型沿用原始碼 docs/RULES.md。此為單機練習測試版。</p><p>本機單機紀錄維持瀏覽器保存。好友房的永久積分由伺服器驗證結算，含電腦補位。遊客請自行備份玩家身分，清除瀏覽器資料後需用備份恢復。</p><button id="closeRules">知道了</button></dialog><dialog id="newGame"><h2>開始新場次？</h2><p>目前場次將被新場次取代，已完成的個人紀錄會保留。</p><div class="actions"><button id="confirmNew">開始新場次</button><button id="cancelNew">繼續原場次</button></div></dialog><script>const Engine=(()=>{const RANKS=Object.freeze([
  [0,'低收入戶','🥣'],[500,'麻將負債仔','🪙'],[1000,'新手出爐','🌱'],[1500,'麻將幼幼班','🍼'],[2000,'胡牌實習生','🐣'],
  [3000,'牌桌打工仔','🧹'],[4000,'摸牌小天才','🀄'],[5500,'海底撈魚王','🐟'],[7000,'小有牌財','💰'],[9000,'麻將暴發戶','🤑'],
  [12000,'牌桌包租公','👔'],[16000,'麻將大富翁','💎'],[21000,'胡牌銀行家','🏦'],[27000,'自摸收割機','🔥'],[35000,'雀壇一方霸主','🐉'],
@@ -562,7 +797,7 @@ async function verifyProof(proof){try{return proof.players.length===4&&proof.com
   if(!api)box.append(node('p',serviceLoading?'正在連接好友房服務…':'好友連線服務尚待部署，暫時無法建立或加入房間。單機版仍可正常遊玩。','notice'));else box.append(node('p','建立時填入自訂六位數字房號，再分享給朋友加入。成功建立過的號碼無法再次建立。','caption'));
   const form=node('form'),nickname=node('input'),code=node('input');nickname.placeholder='你的暱稱';nickname.maxLength=16;nickname.required=false;nickname.setAttribute('aria-label','你的暱稱');nickname.autocomplete='nickname';nickname.value=roomDraft?.nickname??globalThis.PureProgress?.profile?.nickname??storage.get('pure-mahjong-nickname')??getAvatar(myAvatar).name;code.placeholder='自訂六位數字，例如 001234';code.inputMode='numeric';code.maxLength=32;code.setAttribute('aria-label','六位房號');code.value=roomDraft?.code??normalizeCode(new URL(location.href).searchParams.get('room'));code.autocomplete='off';code.setAttribute('autocapitalize','characters');code.spellcheck=false;nickname.oninput=code.oninput=()=>{roomDraft={nickname:nickname.value,code:code.value}};const character=node('div',undefined,'profile-persona');character.append(avatarPortrait(myAvatar),btn(`更換人物：${getAvatar(myAvatar).name}`,()=>avatarPicker({current:myAvatar,onSave:id=>{myAvatar=id;avatarChanged(id)},onClose:render})));form.append(character,node('label','暱稱'),nickname,node('label','房間號碼（建立／加入）'),code);
   const join=async create=>{if(submitting)return;const generation=entryGeneration;if(!api||!nickname.reportValidity())return;roomDraft={nickname:nickname.value,code:normalizeCode(code.value)};try{if(create&&!/^[0-9]{6}$/.test(roomDraft.code))throw Error('建立房間請設定六位純數字房號，可含 0 與 1。');if(!create&&!/^[A-Z0-9]{6}$/.test(roomDraft.code))throw Error('請輸入朋友提供的六位房號');submitting=true;notice='連接房間中…';render();const joined=await post(create?'/api/rooms':`/api/rooms/${roomDraft.code}/join`,{nickname:nickname.value.trim()||getAvatar(myAvatar).name,avatarId:myAvatar,...(create?{code:roomDraft.code}:{})});if(generation!==entryGeneration)return;credentials=joined;credentials.api=api;storage.set('pure-mahjong-nickname',nickname.value.trim());if(!storage.set('pure-mahjong-room',JSON.stringify(credentials)))notice='無法保存重連憑證，請勿關閉頁面。';await connect()}catch(e){if(generation===entryGeneration)notice=e.message}finally{submitting=false;if(generation===entryGeneration)render()}};
-  const fallback=node('a','若目前瀏覽器連不上，開啟同一服務的遊戲站','network-fallback');fallback.href='https://pure-mahjong-friends.upbeat-picture.workers.dev/';fallback.target='_blank';fallback.rel='noopener';box.append(fallback);
+  const fallback=node('a','若目前瀏覽器連不上，開啟同一服務的遊戲站','network-fallback');fallback.href='https://pure-mahjong-friends.a6668793.workers.dev/';fallback.target='_blank';fallback.rel='noopener';box.append(fallback);
   const actions=node('div',undefined,'actions');const createButton=btn('建立好友房',()=>join(true),''),joinButton=btn('加入房間',()=>join(false));createButton.disabled=joinButton.disabled=!api||submitting;actions.append(createButton,joinButton);form.onsubmit=e=>{e.preventDefault();join(false)};form.append(actions);box.append(form,btn('返回首頁',exit));root.append(box)
  }
  function render(){root.replaceChildren();const banner=node('p',notice,'network-notice');banner.setAttribute('role','status');root.append(banner);if(!state){if(credentials){root.append(node('section',undefined,'lobby'));const b=root.lastElementChild;b.append(node('h2',`房間 ${credentials.code}`),node('p',socketStatus),btn('重新連線',()=>{if(socketStatus!=='連線中')connect()}),btn('改輸入房號',()=>resetEntry()),btn('返回首頁',exit))}else entry();return}
@@ -704,7 +939,7 @@ async function verifyProof(proof){try{return proof.players.length===4&&proof.com
     today.append(feature('puzzle',52,'打哪張？','一手牌，一個值得想想的選擇。','THINK / 牌感練習',['呈現一副可選牌的練習手牌。','比較不同出牌的搭子與進張。','提供題目解說；題庫與判定尚未實作。']),feature('patterns',16,'拼一副好牌','從面子與將，認識胡牌的形狀。','DISCOVER / 牌型拼圖',['以拖放組合五組面子與一對將。','逐步認識順子、刻子及常見牌型。','拖放與評分尚未啟用。']));
     const smallCards=el('div',undefined,'dashboard-small-cards'),record=button('',showProfile,'small-dash-card');record.append(el('span','RECORD','eyebrow'),el('strong',String(p.stats.hands)),el('span','完成局數 ↗'));const achievement=button('',preview('成就收藏','把練習的里程碑，收進自己的牌冊。',['以首次胡牌、自摸等事件留下紀念。','只記錄個人成長，不設全球排行榜。','解鎖判定與收藏系統尚未啟用。']),'small-dash-card achievement');achievement.append(el('span','COLLECTION','eyebrow'),el('strong','成就牌冊'),el('span','規劃中 ↗'));smallCards.append(record,achievement);today.append(smallCards);
     columns.append(play,friends,today);page.append(columns);
-    const bottom=el('div',undefined,'dashboard-bottom');bottom.append(el('span','● 單機練習已開放','service-status'),el('span','其餘區域為首頁設計預覽，尚未啟用。'),button('遊玩設定',showSettings,'text-button'));page.append(bottom);app.append(page);
+    const bottom=el('div',undefined,'dashboard-bottom');bottom.append(el('span','● 單機練習已開放','service-status'),el('span','好友房與永久積分已開放；標示「規劃中」的功能為預覽。'),button('遊玩設定',showSettings,'text-button'));page.append(bottom);app.append(page);
   }
   function newGame(){stop();session={avatarIds:opponentAvatars([],profile.avatarId),id:crypto.randomUUID(),handNumber:1,dealer:0,roundWind:0,streak:0,scores:[1000,1000,1000,1000],ended:false,completed:false};deal()}
   function deal(){claims.clear();cancelSettlement();settlementKey=null;session.openingDice=rollOpening(session.dealer);session.game=new Game(localShuffle(),{...session,packetDeal:true,wallOffset:session.openingDice.offset});session.completed=false;selected=null;paused=false;save();beginOpening()}
