@@ -37,7 +37,7 @@ export class SoftwareRenderer {
         }
         color.multiplyScalar(shade);
         const encoded=color.clone().convertLinearToSRGB();const rgb=[Math.min(255,encoded.r*255),Math.min(255,encoded.g*255),Math.min(255,encoded.b*255)];
-        triangles.push({a,b,c,z:(a.z+b.z+c.z)/3,fill:rgb,alpha:mat.opacity??1,image:geo.type==='PlaneGeometry'?mat.map?.image:null});
+        triangles.push({a,b,c,z:(a.z+b.z+c.z)/3,fill:rgb,alpha:mat.opacity??1,image:mat.map?.image,repeat:mat.map?.repeat,shade});
       }
     });
     // Per-pixel depth resolves intersecting tabletop, bevels and stacked wall tiles.
@@ -57,9 +57,10 @@ export class SoftwareRenderer {
         const inv=p*za+q*zb+r*zc,z=1/inv,k=y*w+x;if(z>=depth[k])continue;
         const dest=k*4;let red=t.fill[0],green=t.fill[1],blue=t.fill[2];
         if(tex){
-          const u=(p*a.u*za+q*b.u*zb+r*c.u*zc)/inv,v=(p*a.v*za+q*b.v*zb+r*c.v*zc)/inv;
+          let u=(p*a.u*za+q*b.u*zb+r*c.u*zc)/inv,v=(p*a.v*za+q*b.v*zb+r*c.v*zc)/inv;
+          if(t.repeat&&(t.repeat.x>1||t.repeat.y>1)){u=((u*t.repeat.x)%1+1)%1;v=((v*t.repeat.y)%1+1)%1;}
           const tx=Math.min(tex.width-1,Math.max(0,Math.floor(u*tex.width))),ty=Math.min(tex.height-1,Math.max(0,Math.floor((1-v)*tex.height))),src=(ty*tex.width+tx)*4;
-          red=tex.data[src];green=tex.data[src+1];blue=tex.data[src+2];
+          red=tex.data[src]*t.shade;green=tex.data[src+1]*t.shade;blue=tex.data[src+2]*t.shade;
         }
         depth[k]=z;pixels[dest]=red;pixels[dest+1]=green;pixels[dest+2]=blue;pixels[dest+3]=255;
       }

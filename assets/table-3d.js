@@ -143,11 +143,11 @@ class TableScene {
   readTiles() {
     for(const [sideIndex,side]of sides.entries()){
       const player=this.board.querySelector('.player.'+side);if(!player)continue;
-      const angle=[0,-Math.PI/2,Math.PI,Math.PI/2][sideIndex];
+      const angle=[0,Math.PI/2,Math.PI,-Math.PI/2][sideIndex];
       const identity=player.querySelector('.player-identity');this.identities.push({element:identity,point:[[0,2.2,6.4],[10,2.1,0],[0,2,-7.4],[-10,2.1,0]][sideIndex]});
       if(side==='south'){
         const buttons=[...player.querySelectorAll('.hand .tile,.drawn-slot .tile')],step=1.02,total=(buttons.length-1)*step+.55;
-        buttons.forEach((b,i)=>{const drawn=b.classList.contains('drawn-tile'),selected=b.classList.contains('selected');this.tile(b.querySelector('svg'),-total/2+i*step+(drawn?.55:0),1.05+(selected?.28:0),6.55,{button:b,selected,scale:1.5});});
+        buttons.forEach((b,i)=>{b.addEventListener('focus',()=>{const edge=b.getBoundingClientRect(),area=this.board.getBoundingClientRect();if(edge.left<area.left||edge.right>area.right){this.stage.scrollLeft+=edge.left-area.left-this.board.clientWidth/2;this.projectControls();}});const drawn=b.classList.contains('drawn-tile'),selected=b.classList.contains('selected');this.tile(b.querySelector('svg'),-total/2+i*step+(drawn?.55:0),1.05+(selected?.28:0),6.55,{button:b,selected,scale:1.5});});
       }else{
         const backs=[...player.querySelectorAll('.backs>svg')];
         backs.forEach((svg,i)=>{const [x,z]=this.rotate((i-(backs.length-1)/2)*.65,sideIndex===2?6.3:9.5,angle);this.tile(svg,x,.83,z,{angle});});
@@ -164,7 +164,7 @@ class TableScene {
     // Each wall stack and layer comes from the original wallLayout, including gaps.
     for(const [sideIndex,side]of sides.entries()){
       const rack=this.board.querySelector('.wall-'+side);if(!rack)continue;
-      const angle=[0,-Math.PI/2,Math.PI,Math.PI/2][sideIndex];
+      const angle=[0,Math.PI/2,Math.PI,-Math.PI/2][sideIndex];
       const stacks=[...rack.children],backSvg=new DOMParser().parseFromString(Engine.svg(0,true),'image/svg+xml').documentElement;
       stacks.forEach((stack,i)=>{for(const layer of stack.children){const n=layer.classList.contains('layer-1')?1:0;const [x,z]=this.rotate((i-(stacks.length-1)/2)*.655,sideIndex%2?7.3:4.5,angle);this.tile(backSvg,x,.48+n*.37,z,{flat:true,angle});}});
     }
@@ -183,6 +183,7 @@ class TableScene {
     const h=Math.max(this.board.clientHeight,300),w=Math.max(this.board.clientWidth,820);
     this.width=w;this.height=h;this.canvas.style.width=w+'px';this.canvas.style.height=h+'px';
     this.renderer.setSize(w,h,false);this.camera.aspect=w/h;
+    if(this.lastViewport!==this.board.clientWidth){this.stage.scrollLeft=Math.max(0,(w-this.board.clientWidth)/2);this.lastViewport=this.board.clientWidth;}
     const T=this.T,target=new T.Vector3(0,.25,.1),direction=new T.Vector3(0,18,23).normalize();
     // Fit real world bounds, rather than skewing each UI region independently.
     const bounds=[];for(const x of [-11.7,11.7])for(const z of [-8,8])for(const y of [-1,2.3])bounds.push(new T.Vector3(x,y,z));
@@ -202,7 +203,7 @@ class TableScene {
     for(const {element,point}of this.identities){if(!element)continue;const p=this.project(point);Object.assign(element.style,{left:p.x+'px',top:p.y+'px'});}
     if(this.centerLabel){const p=this.project([0,.5,-.1]);Object.assign(this.centerLabel.style,{left:p.x+'px',top:p.y+'px'});}
   }
-  render(){if(this.dead||this.frame)return;this.frame=requestAnimationFrame(()=>{this.frame=null;if(this.dead)return;try{this.renderer.render(this.scene,this.camera);}catch(error){console.warn('Table render failed',error);}});}
+  render(){if(this.dead||this.frame)return;this.frame=requestAnimationFrame(()=>{this.frame=null;if(this.dead)return;try{const started=performance.now();this.renderer.render(this.scene,this.camera);this.board.dataset.renderMs=(performance.now()-started).toFixed(1);}catch(error){console.warn('Table render failed',error);}});}
   dispose(){
     if(this.dead)return;this.dead=true;if(this.frame)cancelAnimationFrame(this.frame);this.resizeObserver?.disconnect();this.stage.removeEventListener('scroll',this.scroll);this.canvas.removeEventListener('webglcontextlost',this.contextLost);
     this.stage.remove();this.board.classList.remove('three-table');
