@@ -1,0 +1,342 @@
+[
+  {
+    "level": 1,
+    "sourceBounds": [
+      94,
+      130,
+      270,
+      309
+    ],
+    "alphaBounds": [
+      19,
+      22,
+      234,
+      239
+    ],
+    "safeMargin": 17,
+    "transparent": true
+  },
+  {
+    "level": 2,
+    "sourceBounds": [
+      352,
+      130,
+      526,
+      309
+    ],
+    "alphaBounds": [
+      20,
+      16,
+      234,
+      240
+    ],
+    "safeMargin": 16,
+    "transparent": true
+  },
+  {
+    "level": 3,
+    "sourceBounds": [
+      597,
+      130,
+      773,
+      309
+    ],
+    "alphaBounds": [
+      18,
+      22,
+      235,
+      237
+    ],
+    "safeMargin": 18,
+    "transparent": true
+  },
+  {
+    "level": 4,
+    "sourceBounds": [
+      852,
+      130,
+      1025,
+      309
+    ],
+    "alphaBounds": [
+      22,
+      16,
+      236,
+      237
+    ],
+    "safeMargin": 16,
+    "transparent": true
+  },
+  {
+    "level": 5,
+    "sourceBounds": [
+      93,
+      363,
+      271,
+      546
+    ],
+    "alphaBounds": [
+      21,
+      23,
+      237,
+      240
+    ],
+    "safeMargin": 16,
+    "transparent": true
+  },
+  {
+    "level": 6,
+    "sourceBounds": [
+      348,
+      363,
+      529,
+      546
+    ],
+    "alphaBounds": [
+      17,
+      22,
+      239,
+      240
+    ],
+    "safeMargin": 16,
+    "transparent": true
+  },
+  {
+    "level": 7,
+    "sourceBounds": [
+      596,
+      363,
+      776,
+      546
+    ],
+    "alphaBounds": [
+      18,
+      22,
+      234,
+      240
+    ],
+    "safeMargin": 16,
+    "transparent": true
+  },
+  {
+    "level": 8,
+    "sourceBounds": [
+      846,
+      363,
+      1029,
+      546
+    ],
+    "alphaBounds": [
+      17,
+      22,
+      239,
+      240
+    ],
+    "safeMargin": 16,
+    "transparent": true
+  },
+  {
+    "level": 9,
+    "sourceBounds": [
+      90,
+      592,
+      274,
+      782
+    ],
+    "alphaBounds": [
+      20,
+      18,
+      236,
+      240
+    ],
+    "safeMargin": 16,
+    "transparent": true
+  },
+  {
+    "level": 10,
+    "sourceBounds": [
+      347,
+      592,
+      529,
+      782
+    ],
+    "alphaBounds": [
+      26,
+      22,
+      235,
+      235
+    ],
+    "safeMargin": 21,
+    "transparent": true
+  },
+  {
+    "level": 11,
+    "sourceBounds": [
+      588,
+      592,
+      783,
+      782
+    ],
+    "alphaBounds": [
+      18,
+      20,
+      240,
+      232
+    ],
+    "safeMargin": 16,
+    "transparent": true
+  },
+  {
+    "level": 12,
+    "sourceBounds": [
+      841,
+      592,
+      1034,
+      782
+    ],
+    "alphaBounds": [
+      19,
+      23,
+      233,
+      233
+    ],
+    "safeMargin": 19,
+    "transparent": true
+  },
+  {
+    "level": 13,
+    "sourceBounds": [
+      81,
+      828,
+      281,
+      1035
+    ],
+    "alphaBounds": [
+      20,
+      16,
+      231,
+      221
+    ],
+    "safeMargin": 16,
+    "transparent": true
+  },
+  {
+    "level": 14,
+    "sourceBounds": [
+      342,
+      828,
+      535,
+      1035
+    ],
+    "alphaBounds": [
+      23,
+      22,
+      227,
+      234
+    ],
+    "safeMargin": 22,
+    "transparent": true
+  },
+  {
+    "level": 15,
+    "sourceBounds": [
+      587,
+      828,
+      783,
+      1035
+    ],
+    "alphaBounds": [
+      23,
+      22,
+      234,
+      221
+    ],
+    "safeMargin": 22,
+    "transparent": true
+  },
+  {
+    "level": 16,
+    "sourceBounds": [
+      841,
+      828,
+      1037,
+      1035
+    ],
+    "alphaBounds": [
+      23,
+      16,
+      234,
+      238
+    ],
+    "safeMargin": 16,
+    "transparent": true
+  },
+  {
+    "level": 17,
+    "sourceBounds": [
+      82,
+      1063,
+      278,
+      1286
+    ],
+    "alphaBounds": [
+      29,
+      17,
+      224,
+      231
+    ],
+    "safeMargin": 17,
+    "transparent": true
+  },
+  {
+    "level": 18,
+    "sourceBounds": [
+      337,
+      1063,
+      541,
+      1286
+    ],
+    "alphaBounds": [
+      25,
+      16,
+      230,
+      231
+    ],
+    "safeMargin": 16,
+    "transparent": true
+  },
+  {
+    "level": 19,
+    "sourceBounds": [
+      591,
+      1063,
+      782,
+      1286
+    ],
+    "alphaBounds": [
+      32,
+      25,
+      224,
+      235
+    ],
+    "safeMargin": 21,
+    "transparent": true
+  },
+  {
+    "level": 20,
+    "sourceBounds": [
+      833,
+      1063,
+      1046,
+      1286
+    ],
+    "alphaBounds": [
+      21,
+      18,
+      233,
+      240
+    ],
+    "safeMargin": 16,
+    "transparent": true
+  }
+]
