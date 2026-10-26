@@ -1,3 +1,4 @@
+import {SoftwareRenderer} from './table-software-renderer.js';
 /* PURE MAHJONG V1.5 — presentation-only WebGL adapter.
  * Reads the existing public DOM; original buttons remain the sole action path.
  * No storage, engine, network state, or hidden opponent tile access. */
@@ -43,7 +44,8 @@ class TableScene {
     this.T=T; this.board=board; this.dead=false; this.resources=new Set(); this.faceCache=new Map(); this.buttons=[]; this.identities=[];
     this.scene=new T.Scene();
     this.camera=new T.PerspectiveCamera(35, 2, .1, 150);
-    this.renderer=new T.WebGLRenderer({alpha:true,antialias:false,powerPreference:'low-power'});
+    try{this.renderer=new T.WebGLRenderer({alpha:true,antialias:false,powerPreference:'low-power'});}catch{this.renderer=new SoftwareRenderer(T);}
+    this.board.dataset.renderer=this.renderer.isSoftwareRenderer?'software-3d':'webgl';
     this.renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 1.5));
     this.renderer.outputColorSpace=T.SRGBColorSpace;
     this.renderer.shadowMap.enabled=true; this.renderer.shadowMap.type=T.PCFSoftShadowMap;
@@ -170,7 +172,7 @@ class TableScene {
     this.resizeObserver.unobserve(this.board);this.board.classList.remove('three-table');
     for(const {button}of this.buttons)button.removeAttribute('style');
     for(const {element}of this.identities)element?.removeAttribute('style');this.centerLabel?.removeAttribute('style');
-    this.board=board;this.buttons=[];this.identities=[];this.dynamic.clear();
+    this.board=board;board.dataset.renderer=this.renderer.isSoftwareRenderer?'software-3d':'webgl';this.buttons=[];this.identities=[];this.dynamic.clear();
     board.prepend(this.stage);this.readTiles();board.classList.add('three-table');
     this.resizeObserver.observe(board);this.resize();
   }
@@ -198,9 +200,9 @@ class TableScene {
     for(const {element,point}of this.identities){if(!element)continue;const p=this.project(point);Object.assign(element.style,{left:p.x+'px',top:p.y+'px'});}
     if(this.centerLabel){const p=this.project([0,.5,-.1]);Object.assign(this.centerLabel.style,{left:p.x+'px',top:p.y+'px'});}
   }
-  render(){if(this.dead)return;try{this.renderer.render(this.scene,this.camera);}catch(error){console.warn('Table render failed',error);}}
+  render(){if(this.dead||this.frame)return;this.frame=requestAnimationFrame(()=>{this.frame=null;if(this.dead)return;try{this.renderer.render(this.scene,this.camera);}catch(error){console.warn('Table render failed',error);}});}
   dispose(){
-    if(this.dead)return;this.dead=true;this.resizeObserver?.disconnect();this.stage.removeEventListener('scroll',this.scroll);this.canvas.removeEventListener('webglcontextlost',this.contextLost);
+    if(this.dead)return;this.dead=true;if(this.frame)cancelAnimationFrame(this.frame);this.resizeObserver?.disconnect();this.stage.removeEventListener('scroll',this.scroll);this.canvas.removeEventListener('webglcontextlost',this.contextLost);
     this.stage.remove();this.board.classList.remove('three-table');
     for(const {button}of this.buttons)button.removeAttribute('style');
     for(const {element}of this.identities)element?.removeAttribute('style');this.centerLabel?.removeAttribute('style');
