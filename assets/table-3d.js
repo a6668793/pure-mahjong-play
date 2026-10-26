@@ -106,6 +106,7 @@ class TableScene {
     this.backGeometry=this.own(new T.BoxGeometry(.62,.9,.09));
     this.faceGeometry=this.own(new T.PlaneGeometry(.59,.87));
     this.ivory=this.material('#f3e5c7');this.backMaterial=this.material('#16563d',{roughness:.65});
+    this.contactGeometry=this.own(new T.PlaneGeometry(.74,1.02));this.contactMaterial=this.material('#0c3c2d');
     this.selectMaterial=this.material('#ffd16d',{emissive:'#b66d13',emissiveIntensity:.3});
   }
   face(svg) {
@@ -126,6 +127,7 @@ class TableScene {
   }
   tile(svg,x,y,z,{flat=false,angle=0,scale=1,button=null,selected=false}={}) {
     const T=this.T,g=new T.Group();
+    if(this.renderer.isSoftwareRenderer){const shadow=new T.Mesh(this.contactGeometry,this.contactMaterial);shadow.rotation.x=-Math.PI/2;shadow.rotation.z=-angle;shadow.position.set(x+.05,.233,z+.07);shadow.scale.set(scale,flat?scale:scale*.4,1);this.dynamic.add(shadow);}
     const shell=new T.Mesh(this.tileGeometry,selected?this.selectMaterial:this.ivory);shell.castShadow=shell.receiveShadow=true;g.add(shell);
     const back=new T.Mesh(this.backGeometry,this.backMaterial);back.position.z=-.17;back.castShadow=true;g.add(back);
     const face=new T.Mesh(this.faceGeometry,this.face(svg));face.position.z=.164;g.add(face);
@@ -134,7 +136,7 @@ class TableScene {
     if(flat){ // turn around the tabletop normal, preserving the face-up orientation
       const turn=new T.Group();turn.rotation.y=angle;turn.add(g);turn.position.set(x,y,z);turn.scale.setScalar(scale);this.dynamic.add(turn);return turn;
     }
-    g.position.set(x,y,z);g.scale.setScalar(scale);this.dynamic.add(g);
+    if(button)g.rotation.x=-.18;g.position.set(x,y,z);g.scale.setScalar(scale);this.dynamic.add(g);
     if(button)this.buttons.push({button,mesh:g});return g;
   }
   rotate(x,z,angle) {return [x*Math.cos(angle)+z*Math.sin(angle),-x*Math.sin(angle)+z*Math.cos(angle)];}
@@ -144,15 +146,15 @@ class TableScene {
       const angle=[0,-Math.PI/2,Math.PI,Math.PI/2][sideIndex];
       const identity=player.querySelector('.player-identity');this.identities.push({element:identity,point:[[0,2.2,6.4],[10,2.1,0],[0,2,-7.4],[-10,2.1,0]][sideIndex]});
       if(side==='south'){
-        const buttons=[...player.querySelectorAll('.hand .tile,.drawn-slot .tile')],step=.73,total=(buttons.length-1)*step+.45;
-        buttons.forEach((b,i)=>{const drawn=b.classList.contains('drawn-tile'),selected=b.classList.contains('selected');this.tile(b.querySelector('svg'),-total/2+i*step+(drawn?.45:0),.95+(selected?.28:0),6.55,{button:b,selected,scale:1.08});});
+        const buttons=[...player.querySelectorAll('.hand .tile,.drawn-slot .tile')],step=1.02,total=(buttons.length-1)*step+.55;
+        buttons.forEach((b,i)=>{const drawn=b.classList.contains('drawn-tile'),selected=b.classList.contains('selected');this.tile(b.querySelector('svg'),-total/2+i*step+(drawn?.55:0),1.05+(selected?.28:0),6.55,{button:b,selected,scale:1.5});});
       }else{
         const backs=[...player.querySelectorAll('.backs>svg')];
-        backs.forEach((svg,i)=>{const [x,z]=this.rotate((i-(backs.length-1)/2)*.65,6.3,angle);this.tile(svg,x,.83,z,{angle});});
+        backs.forEach((svg,i)=>{const [x,z]=this.rotate((i-(backs.length-1)/2)*.65,sideIndex===2?6.3:9.5,angle);this.tile(svg,x,.83,z,{angle});});
       }
       // Public melds and flowers only; hidden kongs remain backs as in the original UI.
       const pub=[...player.querySelectorAll(':scope>.tiles svg')];
-      pub.forEach((svg,i)=>{const [x,z]=this.rotate(-7.8+(i%12)*.66,4.75-Math.floor(i/12)*1.02,angle);this.tile(svg,x,.48,z,{flat:true,angle});});
+      pub.forEach((svg,i)=>{const [x,z]=this.rotate(-2.31+(i%8)*.66,(sideIndex%2?8.15:5.05)-Math.floor(i/8)*1.02,angle);this.tile(svg,x,.48,z,{flat:true,angle});});
       const zone=this.board.querySelector('.river-zone-'+side);
       const river=[...(zone?.querySelectorAll('.river-tile')||[])];
       // Six tiles per row. A complete Taiwan hand cannot exhaust this 6-row capacity.
@@ -164,7 +166,7 @@ class TableScene {
       const rack=this.board.querySelector('.wall-'+side);if(!rack)continue;
       const angle=[0,-Math.PI/2,Math.PI,Math.PI/2][sideIndex];
       const stacks=[...rack.children],backSvg=new DOMParser().parseFromString(Engine.svg(0,true),'image/svg+xml').documentElement;
-      stacks.forEach((stack,i)=>{for(const layer of stack.children){const n=layer.classList.contains('layer-1')?1:0;const [x,z]=this.rotate((i-(stacks.length-1)/2)*.655,5.35,angle);this.tile(backSvg,x,.48+n*.37,z,{flat:true,angle});}});
+      stacks.forEach((stack,i)=>{for(const layer of stack.children){const n=layer.classList.contains('layer-1')?1:0;const [x,z]=this.rotate((i-(stacks.length-1)/2)*.655,sideIndex%2?7.3:4.5,angle);this.tile(backSvg,x,.48+n*.37,z,{flat:true,angle});}});
     }
     this.centerLabel=this.board.querySelector('.center-label');
   }

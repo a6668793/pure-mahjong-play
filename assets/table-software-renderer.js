@@ -4,10 +4,10 @@ export class SoftwareRenderer {
   constructor(T) {
     this.T=T;this.domElement=document.createElement('canvas');this.ctx=this.domElement.getContext('2d');
     if(!this.ctx)throw new Error('Canvas2D unavailable');
-    this.shadowMap={};this.ratio=1;this.isSoftwareRenderer=true;
+    this.shadowMap={};this.ratio=1;this.images=new WeakMap();this.isSoftwareRenderer=true;
     this.light=new T.Vector3(-7,18,9).normalize();
   }
-  setPixelRatio(r){this.ratio=Math.min(r,1.25);}
+  setPixelRatio(r){this.ratio=1;}
   setSize(w,h){this.width=w;this.height=h;this.domElement.width=Math.round(w*this.ratio);this.domElement.height=Math.round(h*this.ratio);}
   render(scene,camera){
     const T=this.T,ctx=this.ctx,w=this.width,h=this.height,triangles=[];
@@ -36,28 +36,37 @@ export class SoftwareRenderer {
           color=new T.Color(image?.width===128?(mat.map.repeat.x===7?'#166047':'#593923'):'#f3e5c7');
         }
         color.multiplyScalar(shade);
-        const rgb='#'+color.getHexString(T.SRGBColorSpace);
+        const encoded=color.clone().convertLinearToSRGB();const rgb=[Math.min(255,encoded.r*255),Math.min(255,encoded.g*255),Math.min(255,encoded.b*255)];
         triangles.push({a,b,c,z:(a.z+b.z+c.z)/3,fill:rgb,alpha:mat.opacity??1,image:geo.type==='PlaneGeometry'?mat.map?.image:null});
       }
     });
-    triangles.sort((a,b)=>a.z-b.z);
-    ctx.setTransform(this.ratio,0,0,this.ratio,0,0);ctx.clearRect(0,0,w,h);
+    // Per-pixel depth resolves intersecting tabletop, bevels and stacked wall tiles.
+    // Perspective-correct UVs keep every tile symbol intact across both face triangles.
+    const output=ctx.createImageData(w,h),pixels=output.data,depth=new Float32Array(w*h);depth.fill(Infinity);
     for(const t of triangles){
-      const {a,b,c}=t;ctx.globalAlpha=t.alpha;ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.lineTo(c.x,c.y);ctx.closePath();ctx.fillStyle=t.fill;ctx.fill();ctx.strokeStyle=t.fill;ctx.lineWidth=.45;ctx.stroke();
-      if(t.image){
-        const iw=t.image.width,ih=t.image.height;
-        const u0=a.u*iw,v0=(1-a.v)*ih,u1=b.u*iw,v1=(1-b.v)*ih,u2=c.u*iw,v2=(1-c.v)*ih;
-        const det=u0*(v1-v2)+u1*(v2-v0)+u2*(v0-v1);if(Math.abs(det)<1e-7)continue;
-        const A=(a.x*(v1-v2)+b.x*(v2-v0)+c.x*(v0-v1))/det;
-        const C=(a.x*(u2-u1)+b.x*(u0-u2)+c.x*(u1-u0))/det;
-        const E=(a.x*(u1*v2-u2*v1)+b.x*(u2*v0-u0*v2)+c.x*(u0*v1-u1*v0))/det;
-        const B=(a.y*(v1-v2)+b.y*(v2-v0)+c.y*(v0-v1))/det;
-        const D=(a.y*(u2-u1)+b.y*(u0-u2)+c.y*(u1-u0))/det;
-        const F=(a.y*(u1*v2-u2*v1)+b.y*(u2*v0-u0*v2)+c.y*(u0*v1-u1*v0))/det;
-        ctx.save();ctx.clip();ctx.transform(A,B,C,D,E,F);ctx.drawImage(t.image,0,0);ctx.restore();
+      const {a,b,c}=t,det=(b.y-c.y)*(a.x-c.x)+(c.x-b.x)*(a.y-c.y);if(Math.abs(det)<.001)continue;
+      const minX=Math.max(0,Math.floor(Math.min(a.x,b.x,c.x))),maxX=Math.min(w-1,Math.ceil(Math.max(a.x,b.x,c.x)));
+      const minY=Math.max(0,Math.floor(Math.min(a.y,b.y,c.y))),maxY=Math.min(h-1,Math.ceil(Math.max(a.y,b.y,c.y)));
+      let tex=null;
+      if(t.image){tex=this.images.get(t.image);if(!tex){tex=t.image.getContext('2d').getImageData(0,0,t.image.width,t.image.height);this.images.set(t.image,tex);}}
+      const za=-1/a.z,zb=-1/b.z,zc=-1/c.z;
+      for(let y=minY;y<=maxY;y++)for(let x=minX;x<=maxX;x++){
+        const p=( (b.y-c.y)*(x+.5-c.x)+(c.x-b.x)*(y+.5-c.y) )/det;
+        const q=( (c.y-a.y)*(x+.5-c.x)+(a.x-c.x)*(y+.5-c.y) )/det,r=1-p-q;
+        if(p<-.0001||q<-.0001||r<-.0001)continue;
+        const inv=p*za+q*zb+r*zc,z=1/inv,k=y*w+x;if(z>=depth[k])continue;
+        const dest=k*4;let red=t.fill[0],green=t.fill[1],blue=t.fill[2];
+        if(tex){
+          const u=(p*a.u*za+q*b.u*zb+r*c.u*zc)/inv,v=(p*a.v*za+q*b.v*zb+r*c.v*zc)/inv;
+          const tx=Math.min(tex.width-1,Math.max(0,Math.floor(u*tex.width))),ty=Math.min(tex.height-1,Math.max(0,Math.floor((1-v)*tex.height))),src=(ty*tex.width+tx)*4;
+          red=tex.data[src];green=tex.data[src+1];blue=tex.data[src+2];
+        }
+        depth[k]=z;pixels[dest]=red;pixels[dest+1]=green;pixels[dest+2]=blue;pixels[dest+3]=255;
       }
     }
-    ctx.globalAlpha=1;
+    ctx.putImageData(output,0,0);
+    // Textures can be updated asynchronously by the presentation adapter.
+    this.images=new WeakMap();
   }
   dispose(){this.domElement.width=this.domElement.height=1;}
   forceContextLoss(){}
