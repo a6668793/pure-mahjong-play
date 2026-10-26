@@ -67,3 +67,6 @@
 .table.immersive-table.three-loading>*{visibility:hidden!important}
 .table.immersive-table.three-loading:before{content:'立體牌桌準備中…';position:absolute;inset:15% 5%;display:grid;place-items:center;transform:none;background:#145b43;color:#f3e5c7;border:10px solid #593923;font-size:16px;z-index:20}
 @media(max-height:600px) and (orientation:landscape){.table.immersive-table.three-table .dealing-scene,.table.immersive-table.three-table .opening-scene,.table.immersive-table.three-table .dice-scene{padding:3px 8px;bottom:0;max-width:95%;gap:3px}.table.immersive-table.three-table .deal-caption,.table.immersive-table.three-table .dice-scene p{font-size:9px}.table.immersive-table.three-table .dealing-scene button{min-height:22px;font-size:9px}}
+/* Standalone 3D typography, independent of the retired flat stylesheet. */
+.table.immersive-table.three-table .identity-role,.table.immersive-table.three-table .persona-english{display:none}
+.table.immersive-table.three-table .center-label:before{content:attr(data-round);display:block;font-weight:700;color:#ffe7b5}

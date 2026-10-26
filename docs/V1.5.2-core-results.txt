@@ -1,0 +1,17 @@
+{
+  "games": 100,
+  "wins": 96,
+  "draws": 4,
+  "actions": {
+    "discard": 5365,
+    "pong": 636,
+    "chi": 741,
+    "addedKong": 43,
+    "win": 98,
+    "kong": 51,
+    "closedKong": 10
+  },
+  "protectedEngineAndStorage": "identical",
+  "rankCount": 20
+}
+20 new badge assets and 144 readable tile labels: PASS
