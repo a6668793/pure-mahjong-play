@@ -12,3 +12,5 @@
 @media(max-width:1050px){.table.immersive-table .wall-south .wall-stack{width:16px}.table.immersive-table .wall-north .wall-stack{width:13px}.table.immersive-table .center-label:before{font-size:12px}}
 @media(max-width:700px){.table.immersive-table>.north{top:4%;height:29%}.table.immersive-table .north>.tiles{bottom:-25px}.table.immersive-table .wall-south .wall-stack{width:9px}.table.immersive-table .wall-north .wall-stack{width:8px}.table.immersive-table .center-label:before{font-size:10px}}
 @media(max-height:600px) and (orientation:landscape){.table.immersive-table>.north{top:1%;height:30%}.table.immersive-table .north>.tiles{bottom:-21px;left:85%;transform:none;max-width:80px}.table.immersive-table .wall-south .wall-stack{width:10px}.table.immersive-table .wall-north .wall-stack{width:9px}.table.immersive-table .center-label:before{font-size:10px}}
+body:has(.immersive-table) footer{display:none}
+@media(min-width:1100px) and (min-height:700px){.table-wrap .table.immersive-table{height:clamp(440px,calc(100dvh - 320px),700px)}}
