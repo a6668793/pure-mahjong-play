@@ -1,0 +1,248 @@
+[
+  {
+    "size": "1920 × 1080",
+    "viewport": {
+      "h": 1080,
+      "scrollH": 1080,
+      "scrollW": 1920,
+      "w": 1920
+    },
+    "actions": [
+      {
+        "bottom": 1007.234375,
+        "height": 49.390625,
+        "text": "出牌"
+      },
+      {
+        "bottom": 1007.234375,
+        "height": 49.390625,
+        "text": "吃"
+      },
+      {
+        "bottom": 1007.234375,
+        "height": 49.390625,
+        "text": "碰"
+      },
+      {
+        "bottom": 1007.234375,
+        "height": 49.390625,
+        "text": "槓"
+      },
+      {
+        "bottom": 1007.234375,
+        "height": 49.390625,
+        "text": "胡"
+      },
+      {
+        "bottom": 1007.234375,
+        "height": 49.390625,
+        "text": "過"
+      }
+    ]
+  },
+  {
+    "size": "1440 × 900",
+    "viewport": {
+      "h": 900,
+      "scrollH": 900,
+      "scrollW": 1440,
+      "w": 1440
+    },
+    "actions": [
+      {
+        "bottom": 827.234375,
+        "height": 49.390625,
+        "text": "出牌"
+      },
+      {
+        "bottom": 827.234375,
+        "height": 49.390625,
+        "text": "吃"
+      },
+      {
+        "bottom": 827.234375,
+        "height": 49.390625,
+        "text": "碰"
+      },
+      {
+        "bottom": 827.234375,
+        "height": 49.390625,
+        "text": "槓"
+      },
+      {
+        "bottom": 827.234375,
+        "height": 49.390625,
+        "text": "胡"
+      },
+      {
+        "bottom": 827.234375,
+        "height": 49.390625,
+        "text": "過"
+      }
+    ]
+  },
+  {
+    "size": "1366 × 768",
+    "viewport": {
+      "h": 768,
+      "scrollH": 768,
+      "scrollW": 1366,
+      "w": 1366
+    },
+    "actions": [
+      {
+        "bottom": 695.234375,
+        "height": 49.390625,
+        "text": "出牌"
+      },
+      {
+        "bottom": 695.234375,
+        "height": 49.390625,
+        "text": "吃"
+      },
+      {
+        "bottom": 695.234375,
+        "height": 49.390625,
+        "text": "碰"
+      },
+      {
+        "bottom": 695.234375,
+        "height": 49.390625,
+        "text": "槓"
+      },
+      {
+        "bottom": 695.234375,
+        "height": 49.390625,
+        "text": "胡"
+      },
+      {
+        "bottom": 695.234375,
+        "height": 49.390625,
+        "text": "過"
+      }
+    ]
+  },
+  {
+    "size": "768 × 1024",
+    "viewport": {
+      "h": 1024,
+      "scrollH": 1024,
+      "scrollW": 768,
+      "w": 768
+    },
+    "actions": [
+      {
+        "bottom": 962.9375,
+        "height": 44,
+        "text": "出牌"
+      },
+      {
+        "bottom": 962.9375,
+        "height": 44,
+        "text": "吃"
+      },
+      {
+        "bottom": 962.9375,
+        "height": 44,
+        "text": "碰"
+      },
+      {
+        "bottom": 962.9375,
+        "height": 44,
+        "text": "槓"
+      },
+      {
+        "bottom": 962.9375,
+        "height": 44,
+        "text": "胡"
+      },
+      {
+        "bottom": 962.9375,
+        "height": 44,
+        "text": "過"
+      }
+    ]
+  },
+  {
+    "size": "390 × 844",
+    "viewport": {
+      "h": 844,
+      "scrollH": 844,
+      "scrollW": 390,
+      "w": 390
+    },
+    "actions": [
+      {
+        "bottom": 695.6875,
+        "height": 44,
+        "text": "出牌"
+      },
+      {
+        "bottom": 695.6875,
+        "height": 44,
+        "text": "吃"
+      },
+      {
+        "bottom": 695.6875,
+        "height": 44,
+        "text": "碰"
+      },
+      {
+        "bottom": 744.6875,
+        "height": 44,
+        "text": "槓"
+      },
+      {
+        "bottom": 744.6875,
+        "height": 44,
+        "text": "胡"
+      },
+      {
+        "bottom": 744.6875,
+        "height": 44,
+        "text": "過"
+      }
+    ]
+  },
+  {
+    "size": "844 × 390",
+    "viewport": {
+      "h": 390,
+      "scrollH": 390,
+      "scrollW": 844,
+      "w": 844
+    },
+    "actions": [
+      {
+        "bottom": 358.078125,
+        "height": 30.890625,
+        "text": "出牌"
+      },
+      {
+        "bottom": 358.078125,
+        "height": 30.890625,
+        "text": "吃"
+      },
+      {
+        "bottom": 358.078125,
+        "height": 30.890625,
+        "text": "碰"
+      },
+      {
+        "bottom": 358.078125,
+        "height": 30.890625,
+        "text": "槓"
+      },
+      {
+        "bottom": 358.078125,
+        "height": 30.890625,
+        "text": "胡"
+      },
+      {
+        "bottom": 358.078125,
+        "height": 30.890625,
+        "text": "過"
+      }
+    ]
+  }
+]
