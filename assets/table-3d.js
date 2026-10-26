@@ -98,6 +98,8 @@ class TableScene {
     this.box(3.9,.15,2.45,woodMat,0,.3,-.1);
     this.box(3.7,.04,2.25,gold,0,.39,-.1);
     this.box(3.5,.04,2.07,dark,0,.425,-.1);
+    this.handRail=this.box(1,1,1,woodMat,0,0,0);this.handRail.visible=false;this.handRail.castShadow=false;
+    this.handLip=this.box(1,1,1,gold,0,0,0);this.handLip.visible=false;this.handLip.castShadow=false;
     // A reusable bevelled ivory tile with a green backing slab.
     const shape=new T.Shape(),w=.62,h=.9,r=.045;
     shape.moveTo(-w/2+r,-h/2);shape.lineTo(w/2-r,-h/2);shape.quadraticCurveTo(w/2,-h/2,w/2,-h/2+r);shape.lineTo(w/2,h/2-r);shape.quadraticCurveTo(w/2,h/2,w/2-r,h/2);shape.lineTo(-w/2+r,h/2);shape.quadraticCurveTo(-w/2,h/2,-w/2,h/2-r);shape.lineTo(-w/2,-h/2+r);shape.quadraticCurveTo(-w/2,-h/2,-w/2+r,-h/2);
@@ -127,7 +129,7 @@ class TableScene {
   }
   tile(svg,x,y,z,{flat=false,angle=0,scale=1,button=null,selected=false}={}) {
     const T=this.T,g=new T.Group();
-    if(this.renderer.isSoftwareRenderer){const shadow=new T.Mesh(this.contactGeometry,this.contactMaterial);shadow.rotation.x=-Math.PI/2;shadow.rotation.z=-angle;shadow.position.set(x+.05,.233,z+.07);shadow.scale.set(scale,flat?scale:scale*.4,1);this.dynamic.add(shadow);}
+    if(this.renderer.isSoftwareRenderer){const shadow=new T.Mesh(this.contactGeometry,this.contactMaterial);shadow.rotation.x=-Math.PI/2;shadow.rotation.z=-angle;shadow.position.set(x+.05,.233,z+.07);shadow.scale.set(scale,flat?scale:scale*.4,1);this.dynamic.add(shadow);g.userData.contactShadow=shadow;}
     const shell=new T.Mesh(this.tileGeometry,selected?this.selectMaterial:this.ivory);shell.castShadow=shell.receiveShadow=true;g.add(shell);
     const back=new T.Mesh(this.backGeometry,this.backMaterial);back.position.z=-.17;back.castShadow=true;g.add(back);
     const face=new T.Mesh(this.faceGeometry,this.face(svg));face.position.z=.164;g.add(face);
@@ -137,7 +139,7 @@ class TableScene {
       const turn=new T.Group();turn.rotation.y=angle;turn.add(g);turn.position.set(x,y,z);turn.scale.setScalar(scale);this.dynamic.add(turn);return turn;
     }
     if(button)g.rotation.x=-.18;g.position.set(x,y,z);g.scale.setScalar(scale);this.dynamic.add(g);
-    if(button)this.buttons.push({button,mesh:g});return g;
+    if(button)this.buttons.push({button,mesh:g,basePosition:g.position.clone(),baseQuaternion:g.quaternion.clone(),baseScale:g.scale.clone()});return g;
   }
   rotate(x,z,angle) {return [x*Math.cos(angle)+z*Math.sin(angle),-x*Math.sin(angle)+z*Math.cos(angle)];}
   readTiles() {
@@ -188,7 +190,8 @@ class TableScene {
   }
   resize() {
     if(this.dead)return;
-    const h=Math.max(this.stage.clientHeight,180),w=Math.max(this.board.clientWidth,820);
+    const landscape=matchMedia('(max-width:1100px) and (max-height:600px) and (orientation:landscape)').matches;
+    const h=Math.max(this.stage.clientHeight,120),w=landscape?Math.max(this.board.clientWidth,280):Math.max(this.board.clientWidth,820);
     const dimensionsChanged=this.width!==w||this.height!==h;
     this.width=w;this.height=h;this.canvas.style.width=w+'px';this.canvas.style.height=h+'px';
     if(dimensionsChanged)this.renderer.setSize(w,h,false);this.camera.aspect=w/h;
@@ -199,7 +202,27 @@ class TableScene {
     let lo=12,hi=95;
     for(let i=0;i<20;i++){const d=(lo+hi)/2;this.camera.position.copy(target).addScaledVector(direction,d);this.camera.lookAt(target);this.camera.updateProjectionMatrix();this.camera.updateMatrixWorld();const fits=bounds.every(p=>{const q=p.clone().project(this.camera);return Math.abs(q.x)<.97&&Math.abs(q.y)<.94});if(fits)hi=d;else lo=d;}
     this.camera.position.copy(target).addScaledVector(direction,hi);this.camera.lookAt(target);this.camera.updateMatrixWorld();
-    this.scene.updateMatrixWorld(true);this.projectControls();this.render();
+    this.placeForegroundHand();this.scene.updateMatrixWorld(true);this.projectControls();this.render();
+  }
+  placeForegroundHand(){
+    const compact=matchMedia('(max-width:700px), (max-width:1100px) and (max-height:600px) and (orientation:landscape)').matches;
+    this.board.dataset.compactHand=String(compact);this.handRail.visible=this.handLip.visible=compact&&this.buttons.length>0;
+    const T=this.T,depth=10,viewHeight=2*Math.tan(this.camera.fov*Math.PI/360)*depth,units=viewHeight/this.height;
+    const count=this.buttons.length,hasDraw=this.buttons.some(x=>x.button.classList.contains('drawn-tile'));
+    const step=Math.min(51,(this.width-30-(hasDraw?13:0))/Math.max(count,1)),tileWidth=step-3,total=(count-1)*step+(hasDraw?13:0);
+    const position=(mesh,x,y,z)=>{const k=z/depth;mesh.position.set((x-this.width/2)*units*k,(this.height/2-y)*units*k,-z).applyMatrix4(this.camera.matrixWorld);mesh.quaternion.copy(this.camera.quaternion);};
+    for(const [i,item]of this.buttons.entries()){
+      const {mesh,button}=item;
+      if(mesh.userData.contactShadow)mesh.userData.contactShadow.visible=!compact;
+      if(!compact){mesh.position.copy(item.basePosition);mesh.quaternion.copy(item.baseQuaternion);mesh.scale.copy(item.baseScale);continue;}
+      const selected=button.classList.contains('selected'),drawn=button.classList.contains('drawn-tile');
+      position(mesh,this.width/2-total/2+i*step+(drawn?13:0),this.height-38-(selected?10:0),depth);
+      mesh.quaternion.multiply(new T.Quaternion().setFromAxisAngle(new T.Vector3(1,0,0),-.12));mesh.scale.setScalar(tileWidth/(.62/units));
+    }
+    if(compact){
+      position(this.handRail,this.width/2,this.height-7,10.8);this.handRail.scale.set((this.width-12)*units*1.08,12*units,.22);
+      position(this.handLip,this.width/2,this.height-11,10.7);this.handLip.scale.set((this.width-12)*units*1.07,1.5*units,.1);
+    }
   }
   project(point) {const p=new this.T.Vector3(...point).project(this.camera);return {x:(p.x+1)*this.width/2-this.stage.scrollLeft,y:(1-p.y)*this.height/2+this.stage.offsetTop};}
   projectControls() {
