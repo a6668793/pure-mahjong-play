@@ -191,7 +191,8 @@ class TableScene {
   resize() {
     if(this.dead)return;
     const landscape=matchMedia('(max-width:1100px) and (max-height:600px) and (orientation:landscape)').matches;
-    const h=Math.max(this.stage.clientHeight,120),w=landscape?Math.max(this.board.clientWidth,280):Math.max(this.board.clientWidth,820);
+    const portrait=matchMedia('(max-width:700px) and (orientation:portrait)').matches;
+    const h=Math.max(this.stage.clientHeight,120),w=(landscape||portrait)?Math.max(this.board.clientWidth,280):Math.max(this.board.clientWidth,820);
     const dimensionsChanged=this.width!==w||this.height!==h;
     this.width=w;this.height=h;this.canvas.style.width=w+'px';this.canvas.style.height=h+'px';
     if(dimensionsChanged)this.renderer.setSize(w,h,false);this.camera.aspect=w/h;
@@ -208,15 +209,17 @@ class TableScene {
     const compact=matchMedia('(max-width:700px), (max-width:1100px) and (max-height:600px) and (orientation:landscape)').matches;
     this.board.dataset.compactHand=String(compact);this.handRail.visible=this.handLip.visible=compact&&this.buttons.length>0;
     const T=this.T,depth=10,viewHeight=2*Math.tan(this.camera.fov*Math.PI/360)*depth,units=viewHeight/this.height;
-    const count=this.buttons.length,hasDraw=this.buttons.some(x=>x.button.classList.contains('drawn-tile'));
-    const step=Math.min(51,(this.width-30-(hasDraw?13:0))/Math.max(count,1)),tileWidth=step-3,total=(count-1)*step+(hasDraw?13:0);
+    const count=this.buttons.length,hasDraw=this.buttons.some(x=>x.button.classList.contains('drawn-tile')),twoRows=matchMedia('(max-width:700px) and (orientation:portrait)').matches&&count>9,columns=twoRows?Math.ceil(count/2):count;
+    const step=Math.min(49,(this.width-50-(hasDraw?13:0))/Math.max(columns,1)),tileWidth=step-3;
     const position=(mesh,x,y,z)=>{const k=z/depth;mesh.position.set((x-this.width/2)*units*k,(this.height/2-y)*units*k,-z).applyMatrix4(this.camera.matrixWorld);mesh.quaternion.copy(this.camera.quaternion);};
     for(const [i,item]of this.buttons.entries()){
       const {mesh,button}=item;
       if(mesh.userData.contactShadow)mesh.userData.contactShadow.visible=!compact;
       if(!compact){mesh.position.copy(item.basePosition);mesh.quaternion.copy(item.baseQuaternion);mesh.scale.copy(item.baseScale);continue;}
       const selected=button.classList.contains('selected'),drawn=button.classList.contains('drawn-tile');
-      position(mesh,this.width/2-total/2+i*step+(drawn?13:0),this.height-38-(selected?10:0),depth);
+      const row=twoRows?Math.floor(i/columns):0,col=twoRows?i%columns:i,rowCount=twoRows?Math.min(columns,count-row*columns):count;
+      const rowHasDraw=hasDraw&&(!twoRows||row===1),total=(rowCount-1)*step+(rowHasDraw?13:0);
+      position(mesh,this.width/2-total/2+col*step+(drawn?13:0),this.height-38-(twoRows&&row===0?72:0)-(selected?10:0),depth);
       mesh.quaternion.multiply(new T.Quaternion().setFromAxisAngle(new T.Vector3(1,0,0),-.12));mesh.scale.setScalar(tileWidth/(.62/units));
     }
     if(compact){
