@@ -1,0 +1,68 @@
+[
+  {
+    "size": "1920 × 1080",
+    "viewport": {
+      "h": 1080,
+      "scrollH": 1080,
+      "scrollW": 1920,
+      "w": 1920
+    },
+    "cards": 4,
+    "clearance": 2
+  },
+  {
+    "size": "1440 × 900",
+    "viewport": {
+      "h": 900,
+      "scrollH": 900,
+      "scrollW": 1440,
+      "w": 1440
+    },
+    "cards": 4,
+    "clearance": 2
+  },
+  {
+    "size": "1366 × 768",
+    "viewport": {
+      "h": 768,
+      "scrollH": 768,
+      "scrollW": 1366,
+      "w": 1366
+    },
+    "cards": 4,
+    "clearance": 2
+  },
+  {
+    "size": "768 × 1024",
+    "viewport": {
+      "h": 1024,
+      "scrollH": 1024,
+      "scrollW": 768,
+      "w": 768
+    },
+    "cards": 4,
+    "clearance": 2
+  },
+  {
+    "size": "390 × 844",
+    "viewport": {
+      "h": 844,
+      "scrollH": 844,
+      "scrollW": 390,
+      "w": 390
+    },
+    "cards": 4,
+    "clearance": 3
+  },
+  {
+    "size": "844 × 390",
+    "viewport": {
+      "h": 390,
+      "scrollH": 390,
+      "scrollW": 844,
+      "w": 844
+    },
+    "cards": 4,
+    "clearance": 0
+  }
+]
