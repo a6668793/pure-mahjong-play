@@ -54,3 +54,16 @@
  .table-wrap:has(.three-table) .game-actions .table-waiting{grid-column:1/-1}
 }
 @media(max-height:600px) and (orientation:landscape){.table-wrap .table.immersive-table.three-table{height:clamp(210px,calc(100dvh - 145px),430px)}}
+/* V1.5.1 — every live phase uses the SAME scene, including draw/flower frames. */
+.table.immersive-table.three-table.is-opening .player,.table.immersive-table.three-table.is-dealing .center-label{visibility:visible}
+.table.immersive-table.three-table .flying-tile,.table.immersive-table.three-table .shuffle-art{display:none!important}
+.table.immersive-table.three-table .dealing-scene,.table.immersive-table.three-table .opening-scene,.table.immersive-table.three-table .dice-scene{position:absolute;inset:auto auto 5px 50%;transform:translateX(-50%);width:max-content;max-width:90%;height:auto;min-height:0;padding:6px 12px;gap:3px;display:flex;flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:center;border:2px double #b58d4f;border-radius:0;background:#10232bef;color:#f3e5c7;z-index:10;pointer-events:none;overflow:visible}
+.table.immersive-table.three-table .dealing-scene button,.table.immersive-table.three-table .opening-scene button,.table.immersive-table.three-table .dice-scene button{pointer-events:auto;padding:4px 9px;min-height:28px;font-size:11px;margin:0}
+.table.immersive-table.three-table .deal-caption,.table.immersive-table.three-table .opening-caption,.table.immersive-table.three-table .dice-scene p{margin:0;padding:0;background:none;border:0;font-size:11px;letter-spacing:0;color:inherit}
+.table.immersive-table.three-table .dealing-scene progress{width:90px;height:6px}
+.table.immersive-table.three-table .opening-brand,.table.immersive-table.three-table .dice-scene .caption{display:none}
+.table.immersive-table.three-table .dice-scene h2{font-size:13px;letter-spacing:0;margin:0}
+.table.immersive-table.three-table .dice-pair{gap:4px}.table.immersive-table.three-table .die-face{width:27px;height:27px;padding:2px}
+.table.immersive-table.three-loading>*{visibility:hidden!important}
+.table.immersive-table.three-loading:before{content:'立體牌桌準備中…';position:absolute;inset:15% 5%;display:grid;place-items:center;transform:none;background:#145b43;color:#f3e5c7;border:10px solid #593923;font-size:16px;z-index:20}
+@media(max-height:600px) and (orientation:landscape){.table.immersive-table.three-table .dealing-scene,.table.immersive-table.three-table .opening-scene,.table.immersive-table.three-table .dice-scene{padding:3px 8px;bottom:0;max-width:95%;gap:3px}.table.immersive-table.three-table .deal-caption,.table.immersive-table.three-table .dice-scene p{font-size:9px}.table.immersive-table.three-table .dealing-scene button{min-height:22px;font-size:9px}}

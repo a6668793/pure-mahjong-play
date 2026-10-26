@@ -4,7 +4,8 @@ import {SoftwareRenderer} from './table-software-renderer.js';
  * No storage, engine, network state, or hidden opponent tile access. */
 const root = document.querySelector('#app');
 let view, generation = 0, failed = false, preferred = true;
-const loader = () => import('./vendor/three.module.js');
+const threeReady = import('./vendor/three.module.js');
+const loader = () => threeReady;
 const sides = ['south', 'east', 'north', 'west'];
 let queued = false;
 const observe = new MutationObserver(() => {
@@ -14,6 +15,7 @@ const observe = new MutationObserver(() => {
 });
 observe.observe(root, {childList:true});
 reconcile();
+globalThis.PureTable3D = {sync: reconcile};
 async function reconcile() {
   const board = root.querySelector('.immersive-table');
   if (view?.board === board && board?.isConnected) return;
@@ -26,15 +28,17 @@ async function reconcile() {
   board.parentElement.querySelector('.scene-mode')?.remove();
   (board.parentElement.querySelector('.table-head .actions') || board.parentElement).append(control);
   control.onclick = () => { preferred = !preferred; failed = false; view?.dispose(); view = null; control.remove(); reconcile(); };
-  // The original opening sequence keeps its original timing and visuals.
-  if (!preferred || failed || board.matches('.is-opening,.is-dealing')) { view?.dispose(); view = null; return; }
+  // Keep one scene through opening, draws, flower replacement, and discards.
+  if (!preferred || failed) { view?.dispose(); view = null; return; }
   if (view) { view.updateBoard(board); return; }
+  board.classList.add('three-loading');board.setAttribute('aria-busy','true');
   try {
     const THREE = await loader();
     if (ticket !== generation || !board.isConnected) return;
     view = new TableScene(THREE, board);
+    board.classList.remove('three-loading');board.removeAttribute('aria-busy');
   } catch (error) {
-    failed = true; board.classList.remove('three-table');
+    failed = true; board.classList.remove('three-table','three-loading');board.removeAttribute('aria-busy');
     control.textContent = '牌桌：相容模式'; control.setAttribute('aria-pressed','false');
     console.warn('3D table unavailable; original accessible table retained.', error);
   }
@@ -181,8 +185,9 @@ class TableScene {
   resize() {
     if(this.dead)return;
     const h=Math.max(this.board.clientHeight,300),w=Math.max(this.board.clientWidth,820);
+    const dimensionsChanged=this.width!==w||this.height!==h;
     this.width=w;this.height=h;this.canvas.style.width=w+'px';this.canvas.style.height=h+'px';
-    this.renderer.setSize(w,h,false);this.camera.aspect=w/h;
+    if(dimensionsChanged)this.renderer.setSize(w,h,false);this.camera.aspect=w/h;
     if(this.lastViewport!==this.board.clientWidth){this.stage.scrollLeft=Math.max(0,(w-this.board.clientWidth)/2);this.lastViewport=this.board.clientWidth;}
     const T=this.T,target=new T.Vector3(0,.25,.1),direction=new T.Vector3(0,18,23).normalize();
     // Fit real world bounds, rather than skewing each UI region independently.
