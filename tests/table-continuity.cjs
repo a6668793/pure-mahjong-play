@@ -3,7 +3,7 @@ const source=fs.readFileSync('assets/table-3d.js','utf8');
 const reconcile=source.slice(source.indexOf('async function reconcile()'),source.indexOf('class TableScene'));
 function board(phase='') {const classes=new Set(phase.split(' ').filter(Boolean));return {isConnected:true,classList:{add:(...xs)=>xs.forEach(x=>classes.add(x)),remove:(...xs)=>xs.forEach(x=>classes.delete(x)),contains:x=>classes.has(x)},setAttribute(){},removeAttribute(){},parentElement:{querySelector(selector){return selector==='.scene-mode'?null:{append(){}}},append(){}}};}
 (async()=>{
- const context={console,document:{createElement(){return {setAttribute(){},remove(){}}}},generation:0,forceSoftware:false,loader:async()=>({}),currentBoard:null,updates:0,disposed:0};
+ const context={console,mountShowaScene(){},unmountShowaScene(){},document:{createElement(){return {setAttribute(){},remove(){}}}},generation:0,forceSoftware:false,loader:async()=>({}),currentBoard:null,updates:0,disposed:0};
  context.root={querySelector:()=>context.currentBoard};context.view={board:null,updateBoard(b){this.board=b;context.updates++},dispose(){context.disposed++}};
  const original=context.view;context.TableScene=class {constructor(T,b){this.board=b;b.classList.add('three-table')}dispose(){context.disposed++}};
  vm.createContext(context);vm.runInContext(reconcile+';globalThis.run=reconcile',context);

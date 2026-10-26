@@ -1,3 +1,4 @@
+import {mountShowaScene,unmountShowaScene} from './showa-scene.js';
 import {SoftwareRenderer} from './table-software-renderer.js';
 /* PURE MAHJONG V1.5 — presentation-only WebGL adapter.
  * Reads the existing public DOM; original buttons remain the sole action path.
@@ -20,7 +21,8 @@ async function reconcile() {
   const board = root.querySelector('.immersive-table');
   if (view?.board === board && board?.isConnected) return;
   const ticket = ++generation;
-  if (!board) { view?.dispose(); view = null; return; }
+  if (!board) { view?.dispose(); view = null; unmountShowaScene(); return; }
+  mountShowaScene();
   if (view) { view.updateBoard(board); return; }
   board.classList.add('three-loading');board.setAttribute('aria-busy','true');
   try {
@@ -139,10 +141,18 @@ class TableScene {
   }
   rotate(x,z,angle) {return [x*Math.cos(angle)+z*Math.sin(angle),-x*Math.sin(angle)+z*Math.cos(angle)];}
   readTiles() {
+    this.hud=document.createElement('section');this.hud.className='seat-dock';this.hud.setAttribute('aria-label','四方玩家與分數');this.board.append(this.hud);
     for(const [sideIndex,side]of sides.entries()){
       const player=this.board.querySelector('.player.'+side);if(!player)continue;
       const angle=[0,Math.PI/2,Math.PI,-Math.PI/2][sideIndex];
-      const identity=player.querySelector('.player-identity');this.identities.push({element:identity,point:[[0,2.2,6.4],[10,2.1,0],[0,2,-7.4],[-10,2.1,0]][sideIndex]});
+      const identity=player.querySelector('.player-identity');
+      if(identity){
+        identity.classList.add('seat-badge','seat-'+side);identity.classList.toggle('seat-active',player.classList.contains('active'));
+        const position=document.createElement('span');position.className='seat-position';position.textContent=['自己','右家','對家','左家'][sideIndex];identity.prepend(position);
+        const name=identity.querySelector('.player-name'),text=name?.textContent??'',split=text.lastIndexOf(' ／ ');
+        if(name&&split>=0){name.textContent=text.slice(0,split);name.title=text.slice(0,split);const score=document.createElement('strong');score.className='seat-score';score.textContent=text.slice(split+3);identity.querySelector('.identity-copy').append(score);}
+        this.hud.append(identity);this.identities.push({element:identity});
+      }
       if(side==='south'){
         const buttons=[...player.querySelectorAll('.hand .tile,.drawn-slot .tile')],step=1.02,total=(buttons.length-1)*step+.55;
         buttons.forEach((b,i)=>{b.addEventListener('focus',()=>{const edge=b.getBoundingClientRect(),area=this.board.getBoundingClientRect();if(edge.left<area.left||edge.right>area.right){this.stage.scrollLeft+=edge.left-area.left-this.board.clientWidth/2;this.projectControls();}});const drawn=b.classList.contains('drawn-tile'),selected=b.classList.contains('selected');this.tile(b.querySelector('svg'),-total/2+i*step+(drawn?.55:0),1.05+(selected?.28:0),6.55,{button:b,selected,scale:1.5});});
@@ -169,7 +179,7 @@ class TableScene {
     this.centerLabel=this.board.querySelector('.center-label');
   }
   updateBoard(board) {
-    this.resizeObserver.unobserve(this.board);this.board.classList.remove('three-table');
+    this.resizeObserver.unobserve(this.board);this.board.classList.remove('three-table');this.hud?.remove();
     for(const {button}of this.buttons)button.removeAttribute('style');
     for(const {element}of this.identities)element?.removeAttribute('style');this.centerLabel?.removeAttribute('style');
     this.board=board;board.dataset.renderer=this.renderer.isSoftwareRenderer?'software-3d':'webgl';this.buttons=[];this.identities=[];this.dynamic.clear();
@@ -178,7 +188,7 @@ class TableScene {
   }
   resize() {
     if(this.dead)return;
-    const h=Math.max(this.board.clientHeight,300),w=Math.max(this.board.clientWidth,820);
+    const h=Math.max(this.stage.clientHeight,180),w=Math.max(this.board.clientWidth,820);
     const dimensionsChanged=this.width!==w||this.height!==h;
     this.width=w;this.height=h;this.canvas.style.width=w+'px';this.canvas.style.height=h+'px';
     if(dimensionsChanged)this.renderer.setSize(w,h,false);this.camera.aspect=w/h;
@@ -191,7 +201,7 @@ class TableScene {
     this.camera.position.copy(target).addScaledVector(direction,hi);this.camera.lookAt(target);this.camera.updateMatrixWorld();
     this.scene.updateMatrixWorld(true);this.projectControls();this.render();
   }
-  project(point) {const p=new this.T.Vector3(...point).project(this.camera);return {x:(p.x+1)*this.width/2-this.stage.scrollLeft,y:(1-p.y)*this.height/2};}
+  project(point) {const p=new this.T.Vector3(...point).project(this.camera);return {x:(p.x+1)*this.width/2-this.stage.scrollLeft,y:(1-p.y)*this.height/2+this.stage.offsetTop};}
   projectControls() {
     if(this.dead||!this.width)return;
     for(const {button,mesh}of this.buttons){
@@ -199,13 +209,12 @@ class TableScene {
       const left=Math.min(...points.map(p=>p.x)),top=Math.min(...points.map(p=>p.y)),right=Math.max(...points.map(p=>p.x)),bottom=Math.max(...points.map(p=>p.y));
       Object.assign(button.style,{left:left+'px',top:top+'px',width:(right-left)+'px',height:(bottom-top)+'px'});
     }
-    for(const {element,point}of this.identities){if(!element)continue;const p=this.project(point);Object.assign(element.style,{left:p.x+'px',top:p.y+'px'});}
     if(this.centerLabel){const p=this.project([0,.5,-.1]);Object.assign(this.centerLabel.style,{left:p.x+'px',top:p.y+'px'});}
   }
   render(){if(this.dead||this.frame)return;this.frame=requestAnimationFrame(()=>{this.frame=null;if(this.dead)return;try{const started=performance.now();this.renderer.render(this.scene,this.camera);this.board.dataset.renderMs=(performance.now()-started).toFixed(1);}catch(error){console.warn('Table render failed',error);}});}
   dispose(){
     if(this.dead)return;this.dead=true;if(this.frame)cancelAnimationFrame(this.frame);this.resizeObserver?.disconnect();this.stage.removeEventListener('scroll',this.scroll);this.canvas.removeEventListener('webglcontextlost',this.contextLost);
-    this.stage.remove();this.board.classList.remove('three-table');
+    this.stage.remove();this.hud?.remove();this.board.classList.remove('three-table');
     for(const {button}of this.buttons)button.removeAttribute('style');
     for(const {element}of this.identities)element?.removeAttribute('style');this.centerLabel?.removeAttribute('style');
     this.resources.forEach(r=>r.dispose());this.resources.clear();this.renderer.dispose();this.renderer.forceContextLoss();
