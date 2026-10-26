@@ -1,0 +1,22 @@
+/* V1.5: real shared world coordinates. These overrides activate after WebGL succeeds. */
+.table-wrap .table.immersive-table.three-table{height:clamp(460px,calc(100dvh - 275px),850px);overflow:hidden;isolation:isolate;background:none;box-shadow:none;border:0;padding:0}
+.table.immersive-table.three-table:before,.table.immersive-table.three-table:after{display:none}
+.three-table .webgl-stage{position:absolute;inset:0;overflow-x:auto;overflow-y:hidden;z-index:1;scrollbar-width:thin;scrollbar-color:#b68d4d #18251c;touch-action:pan-x}
+.three-table .mahjong-canvas{display:block;image-rendering:pixelated;background:transparent}
+.table.immersive-table.three-table>.player,.table.immersive-table.three-table .south .hand-rack,.table.immersive-table.three-table .south .hand,.table.immersive-table.three-table .drawn-slot,.table.immersive-table.three-table>.center{display:contents!important;transform:none!important;filter:none!important}
+.table.immersive-table.three-table .backs,.table.immersive-table.three-table .wall-frame,.table.immersive-table.three-table .player>.tiles,.table.immersive-table.three-table .perspective-river,.table.immersive-table.three-table .drawn-label{position:absolute!important;width:1px!important;height:1px!important;overflow:hidden!important;clip-path:inset(50%)!important;opacity:0;pointer-events:none}
+.table.immersive-table.three-table .south .tile{position:absolute!important;z-index:8;min-width:0!important;min-height:0!important;max-width:none!important;max-height:none!important;margin:0!important;padding:0!important;transform:none!important;filter:none!important;border:0!important;outline:0!important;background:transparent!important;box-shadow:none!important;opacity:1!important;cursor:pointer;touch-action:manipulation}
+.table.immersive-table.three-table .south .tile svg{visibility:hidden}
+.table.immersive-table.three-table .south .tile:focus-visible{outline:3px solid #ffe3a0!important;outline-offset:3px!important}
+.table.immersive-table.three-table .player .player-identity{position:absolute!important;width:max-content!important;max-width:220px!important;min-height:0!important;height:auto!important;right:auto!important;bottom:auto!important;margin:0!important;padding:0!important;transform:translate(-50%,-100%)!important;flex-direction:row!important;gap:5px!important;z-index:5}
+.table.immersive-table.three-table .player .player-name{font-size:11px;white-space:nowrap;background:#10232bf0;border:3px double #c89a4e;padding:5px 8px;box-shadow:2px 3px #17130d}
+.table.immersive-table.three-table .player .life-chip{display:none}
+.table.immersive-table.three-table .player .portrait{--avatar-size:32px}
+.table.immersive-table.three-table .player .identity-copy{display:block}
+.table.immersive-table.three-table .center-label{position:absolute!important;max-width:230px!important;width:max-content!important;min-height:0!important;transform:translate(-50%,-50%)!important;z-index:3;pointer-events:none;font-size:10px;line-height:1.35;padding:7px 10px;border:0;background:#2c1e14e8;box-shadow:none;letter-spacing:0}
+.table.immersive-table.three-table .center-label:before{font-size:13px;margin-bottom:3px}
+.table-wrap:has(.three-table) .game-actions{margin:0 2% 0;padding:7px 10px;gap:10px;background:#152330f2}
+.table-wrap:has(.three-table) .game-actions button{font-size:18px;min-height:48px}
+.table-wrap:has(.three-table) .solo-hint{margin:7px 0}
+@media(max-width:700px){.table-wrap .table.immersive-table.three-table{height:460px}.table.immersive-table.three-table .player .player-name{font-size:10px}.table-wrap:has(.three-table) .game-actions{margin:7px 0 0;gap:5px}.table-wrap:has(.three-table) .solo-hint:after{content:'　直向可左右滑動牌桌；建議橫向遊玩。';color:#edc27e}.table.immersive-table.three-table .player .portrait{--avatar-size:26px}}
+@media(max-height:600px) and (orientation:landscape){.table-wrap .table.immersive-table.three-table{height:clamp(260px,calc(100dvh - 155px),430px)}.table-wrap:has(.three-table) .game-actions button{min-height:32px;font-size:14px}.table.immersive-table.three-table .player .player-name{font-size:9px;padding:2px 5px}.table.immersive-table.three-table .player .portrait{--avatar-size:22px}.table.immersive-table.three-table .center-label{font-size:9px;padding:3px 6px}.table.immersive-table.three-table .center-label:before{font-size:10px}}
