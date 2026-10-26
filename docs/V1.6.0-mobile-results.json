@@ -1,0 +1,380 @@
+{
+  "home": [
+    {
+      "size": "844 × 390",
+      "viewport": {
+        "h": 390,
+        "scrollW": 829,
+        "w": 829
+      },
+      "entries": [
+        {
+          "bottom": 160.453125,
+          "left": 490.0625,
+          "right": 809,
+          "text": "東單機對戰與三位電腦切磋牌技›"
+        },
+        {
+          "bottom": 217.546875,
+          "left": 490.0625,
+          "right": 809,
+          "text": "發好友開房邀請熟悉的人，一起上桌›"
+        },
+        {
+          "bottom": 274.640625,
+          "left": 490.0625,
+          "right": 809,
+          "text": "萬階級圖鑑二十階麻將人生›"
+        },
+        {
+          "bottom": 346.640625,
+          "left": 490.0625,
+          "right": 809,
+          "text": "牌桌為你留著YOUR TABLE IS WAITING繼續這一局第 1 局，牌桌還為你留著。↗一萬中"
+        }
+      ]
+    },
+    {
+      "size": "667 × 375",
+      "viewport": {
+        "h": 375,
+        "scrollW": 652,
+        "w": 652
+      },
+      "entries": [
+        {
+          "bottom": 152.953125,
+          "left": 387.40625,
+          "right": 632,
+          "text": "東單機對戰與三位電腦切磋牌技›"
+        },
+        {
+          "bottom": 210.046875,
+          "left": 387.40625,
+          "right": 632,
+          "text": "發好友開房邀請熟悉的人，一起上桌›"
+        },
+        {
+          "bottom": 267.140625,
+          "left": 387.40625,
+          "right": 632,
+          "text": "萬階級圖鑑二十階麻將人生›"
+        },
+        {
+          "bottom": 339.140625,
+          "left": 387.40625,
+          "right": 632,
+          "text": "牌桌為你留著YOUR TABLE IS WAITING繼續這一局第 1 局，牌桌還為你留著。↗一萬中"
+        }
+      ]
+    },
+    {
+      "size": "926 × 428",
+      "viewport": {
+        "h": 428,
+        "scrollW": 911,
+        "w": 911
+      },
+      "entries": [
+        {
+          "bottom": 179.453125,
+          "left": 537.625,
+          "right": 891,
+          "text": "東單機對戰與三位電腦切磋牌技›"
+        },
+        {
+          "bottom": 236.546875,
+          "left": 537.625,
+          "right": 891,
+          "text": "發好友開房邀請熟悉的人，一起上桌›"
+        },
+        {
+          "bottom": 293.640625,
+          "left": 537.625,
+          "right": 891,
+          "text": "萬階級圖鑑二十階麻將人生›"
+        },
+        {
+          "bottom": 365.640625,
+          "left": 537.625,
+          "right": 891,
+          "text": "牌桌為你留著YOUR TABLE IS WAITING繼續這一局第 1 局，牌桌還為你留著。↗一萬中"
+        }
+      ]
+    },
+    {
+      "size": "390 × 844",
+      "viewport": {
+        "h": 844,
+        "scrollW": 375,
+        "w": 375
+      },
+      "entries": [
+        {
+          "bottom": 361.28125,
+          "left": 21,
+          "right": 183.5,
+          "text": "東單機對戰與三位電腦切磋牌技›"
+        },
+        {
+          "bottom": 361.28125,
+          "left": 191.5,
+          "right": 354,
+          "text": "發好友開房邀請熟悉的人，一起上桌›"
+        },
+        {
+          "bottom": 429.96875,
+          "left": 21,
+          "right": 354,
+          "text": "萬階級圖鑑二十階麻將人生›"
+        },
+        {
+          "bottom": 521.96875,
+          "left": 21,
+          "right": 354,
+          "text": "牌桌為你留著YOUR TABLE IS WAITING繼續這一局第 1 局，牌桌還為你留著。↗一萬中"
+        }
+      ]
+    }
+  ],
+  "game": [
+    {
+      "size": "1920 × 1080",
+      "viewport": {
+        "h": 1080,
+        "scrollH": 1080,
+        "scrollW": 1920,
+        "w": 1920
+      },
+      "table": {
+        "bottom": 820.421875,
+        "clearance": 2,
+        "compact": "false",
+        "count": 16,
+        "handWidth": [
+          62.9375,
+          78.3125
+        ],
+        "left": 453.328125,
+        "right": 1433.453125
+      },
+      "actions": {
+        "bottom": 1006.03125,
+        "display": "flex",
+        "visible": [
+          "碰 北 北",
+          "過"
+        ]
+      }
+    },
+    {
+      "size": "1440 × 900",
+      "viewport": {
+        "h": 900,
+        "scrollH": 900,
+        "scrollW": 1440,
+        "w": 1440
+      },
+      "table": {
+        "bottom": 662.484375,
+        "clearance": 2,
+        "compact": "false",
+        "count": 16,
+        "handWidth": [
+          46.328125,
+          57.640625
+        ],
+        "left": 346.90625,
+        "right": 1068.390625
+      },
+      "actions": {
+        "bottom": 826.03125,
+        "display": "flex",
+        "visible": [
+          "碰 北 北",
+          "過"
+        ]
+      }
+    },
+    {
+      "size": "1366 × 768",
+      "viewport": {
+        "h": 768,
+        "scrollH": 768,
+        "scrollW": 1366,
+        "w": 1366
+      },
+      "table": {
+        "bottom": 552.765625,
+        "clearance": 2,
+        "compact": "false",
+        "count": 16,
+        "handWidth": [
+          34.78125,
+          43.28125
+        ],
+        "left": 402.796875,
+        "right": 944.578125
+      },
+      "actions": {
+        "bottom": 694.03125,
+        "display": "flex",
+        "visible": [
+          "碰 北 北",
+          "過"
+        ]
+      }
+    },
+    {
+      "size": "768 × 1024",
+      "viewport": {
+        "h": 1024,
+        "scrollH": 1024,
+        "scrollW": 768,
+        "w": 768
+      },
+      "table": {
+        "bottom": 694.359375,
+        "clearance": 2,
+        "compact": "false",
+        "count": 16,
+        "handWidth": [
+          34.015625,
+          39.625
+        ],
+        "left": 109.5,
+        "right": 639.359375
+      },
+      "actions": {
+        "bottom": 925.9375,
+        "display": "flex",
+        "visible": [
+          "碰 北 北",
+          "過"
+        ]
+      }
+    },
+    {
+      "size": "390 × 844",
+      "viewport": {
+        "h": 844,
+        "scrollH": 844,
+        "scrollW": 390,
+        "w": 390
+      },
+      "table": {
+        "bottom": 747.4375,
+        "clearance": 3,
+        "compact": "true",
+        "count": 16,
+        "handWidth": [
+          44.1875,
+          45.234375
+        ],
+        "left": 25.1875,
+        "right": 364.78125
+      },
+      "actions": {
+        "bottom": 813,
+        "display": "flex",
+        "visible": [
+          "碰 北 北",
+          "過"
+        ]
+      }
+    },
+    {
+      "size": "844 × 390",
+      "viewport": {
+        "h": 390,
+        "scrollH": 390,
+        "scrollW": 844,
+        "w": 844
+      },
+      "table": {
+        "bottom": 336.140625,
+        "clearance": 1,
+        "compact": "true",
+        "count": 16,
+        "handWidth": [
+          54.640625,
+          63.671875
+        ],
+        "left": 8,
+        "right": 835.984375
+      },
+      "actions": {
+        "bottom": 388,
+        "display": "flex",
+        "visible": [
+          "碰 北 北",
+          "過"
+        ]
+      }
+    },
+    {
+      "size": "667 × 375",
+      "viewport": {
+        "h": 375,
+        "scrollH": 375,
+        "scrollW": 667,
+        "w": 667
+      },
+      "table": {
+        "bottom": 311.1875,
+        "clearance": 1,
+        "compact": "true",
+        "count": 16,
+        "handWidth": [
+          41.25,
+          46.90625
+        ],
+        "left": 15.34375,
+        "right": 651.625
+      },
+      "actions": {
+        "bottom": 373,
+        "display": "flex",
+        "visible": [
+          "碰 北 北",
+          "過"
+        ]
+      }
+    },
+    {
+      "size": "926 × 428",
+      "viewport": {
+        "h": 428,
+        "scrollH": 428,
+        "scrollW": 926,
+        "w": 926
+      },
+      "table": {
+        "bottom": 374.125,
+        "clearance": 1,
+        "compact": "true",
+        "count": 16,
+        "handWidth": [
+          54.21875,
+          61.859375
+        ],
+        "left": 52.109375,
+        "right": 873.859375
+      },
+      "actions": {
+        "bottom": 426,
+        "display": "flex",
+        "visible": [
+          "碰 北 北",
+          "過"
+        ]
+      }
+    }
+  ],
+  "interactionChecks": [
+    "portrait selection retained after rotating to landscape",
+    "discard 5萬 appeared in south river",
+    "legal 碰 北 北 and 過 only",
+    "pong produced 北 北 北 meld and hid idle actions"
+  ]
+}
