@@ -20,3 +20,29 @@
 .table-wrap:has(.three-table) .solo-hint{margin:7px 0}
 @media(max-width:700px){.table-wrap .table.immersive-table.three-table{height:460px}.table.immersive-table.three-table .player .player-name{font-size:10px}.table-wrap:has(.three-table) .game-actions{margin:7px 0 0;gap:5px}.table-wrap:has(.three-table) .solo-hint:after{content:'　直向可左右滑動牌桌；建議橫向遊玩。';color:#edc27e}.table.immersive-table.three-table .player .portrait{--avatar-size:26px}}
 @media(max-height:600px) and (orientation:landscape){.table-wrap .table.immersive-table.three-table{height:clamp(260px,calc(100dvh - 155px),430px)}.table-wrap:has(.three-table) .game-actions button{min-height:32px;font-size:14px}.table.immersive-table.three-table .player .player-name{font-size:9px;padding:2px 5px}.table.immersive-table.three-table .player .portrait{--avatar-size:22px}.table.immersive-table.three-table .center-label{font-size:9px;padding:3px 6px}.table.immersive-table.three-table .center-label:before{font-size:10px}}
+/* Keep legal multi-tile choices readable in the original action buttons. */
+.table-wrap:has(.three-table) .game-actions button{padding:8px 10px;letter-spacing:1px;line-height:1.3;overflow-wrap:normal}
+@media(max-width:700px){
+ body:has(.three-table)>header{display:flex;flex-wrap:nowrap;gap:6px;padding:6px 8px;overflow-x:auto;min-height:0}
+ body:has(.three-table)>header .brand{flex:0 0 28px;min-width:28px;margin:0}
+ body:has(.three-table)>header .brand svg{width:26px;height:30px}
+ body:has(.three-table)>header .brand-wordmark{display:none}
+ body:has(.three-table)>header>button{flex:0 0 auto;white-space:nowrap;font-size:11px;min-height:32px;padding:5px 8px;margin:0}
+ .table-wrap:has(.three-table) .table-head{margin:0 0 4px;padding:6px;gap:4px}
+ .table-wrap:has(.three-table) .table-head .actions{gap:4px}
+ .table-wrap:has(.three-table) .table-head button{padding:4px 7px;font-size:10px;min-height:28px}
+ .table-wrap:has(.three-table) .game-actions button{font-size:15px;min-height:44px;padding:5px;flex:1 1 29%;min-width:85px;letter-spacing:0}
+}
+@media(max-height:600px) and (orientation:landscape){
+ body:has(.three-table)>header{padding:3px 8px;gap:6px;min-height:0;flex-wrap:nowrap}
+ body:has(.three-table)>header .brand-wordmark{display:none}
+ body:has(.three-table)>header .brand svg{width:24px;height:26px}
+ body:has(.three-table)>header>button{white-space:nowrap;font-size:9px;min-height:25px;padding:3px 7px}
+ .table-wrap:has(.three-table) .table-head{padding:3px 5px;gap:4px;font-size:9px;margin:0}
+ .table-wrap:has(.three-table) .table-head .actions{flex-wrap:nowrap;width:auto;gap:3px}
+ .table-wrap:has(.three-table) .table-head button{padding:3px 5px;min-height:23px;font-size:9px}
+ .table-wrap .table.immersive-table.three-table{height:clamp(220px,calc(100dvh - 130px),430px)}
+ .table-wrap:has(.three-table) .game-actions{margin:0;padding:3px 5px;gap:5px;flex-wrap:nowrap}
+ .table-wrap:has(.three-table) .game-actions button{padding:4px 6px;min-height:30px;min-width:65px;flex:1 1 110px;font-size:13px;letter-spacing:0}
+ .table-wrap:has(.three-table) .solo-hint{font-size:9px;margin:3px 0;line-height:1.3}
+}
