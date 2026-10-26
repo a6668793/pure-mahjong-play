@@ -82,3 +82,4 @@ button{touch-action:manipulation}
  .online-wrap:has(.immersive-table)>.invite-link,.online-wrap:has(.immersive-table)>.table-scoring{display:none}
  .online-wrap:has(.immersive-table)>.voice-controls{flex:0 0 auto;max-height:42px;overflow:auto;margin:0;padding:3px 5px}.online-wrap:has(.immersive-table) .table-head>button{font-size:10px;padding:4px;min-height:28px}
 }
+@media(max-width:700px),(max-width:1100px) and (max-height:600px) and (orientation:landscape){.showa-welcome{display:grid;padding:0}}
