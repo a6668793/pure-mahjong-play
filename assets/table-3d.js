@@ -3,7 +3,7 @@ import {SoftwareRenderer} from './table-software-renderer.js';
  * Reads the existing public DOM; original buttons remain the sole action path.
  * No storage, engine, network state, or hidden opponent tile access. */
 const root = document.querySelector('#app');
-let view, generation = 0, failed = false, preferred = true;
+let view, generation = 0, forceSoftware = false;
 const threeReady = import('./vendor/three.module.js');
 const loader = () => threeReady;
 const sides = ['south', 'east', 'north', 'west'];
@@ -21,15 +21,6 @@ async function reconcile() {
   if (view?.board === board && board?.isConnected) return;
   const ticket = ++generation;
   if (!board) { view?.dispose(); view = null; return; }
-  const control = document.createElement('button');
-  control.className = 'quiet scene-mode'; control.type = 'button';
-  control.textContent = preferred && !failed ? '牌桌：3D' : '牌桌：相容模式';
-  control.setAttribute('aria-pressed', String(preferred && !failed));
-  board.parentElement.querySelector('.scene-mode')?.remove();
-  (board.parentElement.querySelector('.table-head .actions') || board.parentElement).append(control);
-  control.onclick = () => { preferred = !preferred; failed = false; view?.dispose(); view = null; control.remove(); reconcile(); };
-  // Keep one scene through opening, draws, flower replacement, and discards.
-  if (!preferred || failed) { view?.dispose(); view = null; return; }
   if (view) { view.updateBoard(board); return; }
   board.classList.add('three-loading');board.setAttribute('aria-busy','true');
   try {
@@ -38,9 +29,12 @@ async function reconcile() {
     view = new TableScene(THREE, board);
     board.classList.remove('three-loading');board.removeAttribute('aria-busy');
   } catch (error) {
-    failed = true; board.classList.remove('three-table','three-loading');board.removeAttribute('aria-busy');
-    control.textContent = '牌桌：相容模式'; control.setAttribute('aria-pressed','false');
-    console.warn('3D table unavailable; original accessible table retained.', error);
+    board.classList.remove('three-table','three-loading');board.classList.add('three-error');board.removeAttribute('aria-busy');
+    board.querySelector('.webgl-stage')?.remove();
+    const panel=document.createElement('section');panel.className='scene-error';panel.setAttribute('role','alert');
+    const message=document.createElement('p');message.textContent='立體牌桌暫時無法載入，請重新整理後再試。';
+    const retry=document.createElement('button');retry.textContent='重新整理';retry.onclick=()=>location.reload();panel.append(message,retry);board.append(panel);
+    console.warn('3D table could not be initialized.', error);
   }
 }
 class TableScene {
@@ -48,7 +42,7 @@ class TableScene {
     this.T=T; this.board=board; this.dead=false; this.resources=new Set(); this.faceCache=new Map(); this.buttons=[]; this.identities=[];
     this.scene=new T.Scene();
     this.camera=new T.PerspectiveCamera(35, 2, .1, 150);
-    try{this.renderer=new T.WebGLRenderer({alpha:true,antialias:false,powerPreference:'low-power'});}catch{this.renderer=new SoftwareRenderer(T);}
+    try{if(forceSoftware)throw new Error('Use software 3D');this.renderer=new T.WebGLRenderer({alpha:true,antialias:false,powerPreference:'low-power'});}catch{this.renderer=new SoftwareRenderer(T);}
     this.board.dataset.renderer=this.renderer.isSoftwareRenderer?'software-3d':'webgl';
     this.renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 1.5));
     this.renderer.outputColorSpace=T.SRGBColorSpace;
@@ -57,7 +51,7 @@ class TableScene {
     this.canvas=this.renderer.domElement; this.canvas.className='mahjong-canvas';
     this.canvas.setAttribute('role','img'); this.canvas.setAttribute('aria-label','昭和麻將館立體牌桌；使用手牌按鈕選牌，再按出牌。');
     this.stage.append(this.canvas); board.prepend(this.stage);
-    this.contextLost = e => {e.preventDefault(); failed=true; this.dispose(); view=null; this.board.parentElement.querySelector('.scene-mode')?.remove(); reconcile();};
+    this.contextLost = e => {e.preventDefault(); forceSoftware=true; this.dispose(); view=null; reconcile();};
     this.canvas.addEventListener('webglcontextlost',this.contextLost);
     const ambient=new T.HemisphereLight(0xffeed1,0x405044,2.4); this.scene.add(ambient);
     const key=new T.DirectionalLight(0xffdc9b,3.1); key.position.set(-7,18,9); key.castShadow=true;
