@@ -1,0 +1,55 @@
+/* V1.6.1: reserved scene, status, hand and action regions. */
+body>header{min-height:56px;padding:6px 3vw;gap:8px;flex-wrap:nowrap}
+body>header .brand{margin-right:auto;flex:1 1 auto;min-width:0;justify-content:flex-start}
+body>header .brand>svg{width:32px;height:36px}body>header .brand-wordmark strong{font-size:17px}
+body>header>button{flex:0 0 auto;min-height:40px;padding:7px 14px;font-size:13px}
+.comfort-menu{width:min(460px,calc(100vw - 24px))}.comfort-menu-items{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:16px 0}.comfort-menu button{min-height:44px;white-space:normal}.comfort-menu-items button{width:100%;padding:10px}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #f4c476;outline-offset:3px}
+dialog{max-height:calc(100dvh - 24px);max-width:calc(100vw - 24px);overflow:auto;overscroll-behavior:contain;scrollbar-gutter:stable;padding:clamp(14px,3vw,28px)}
+dialog::backdrop{background:#071219bd}dialog h2{line-height:1.4;overflow-wrap:anywhere}dialog input,dialog select{max-width:100%;font-size:16px}dialog .actions{gap:8px}dialog .actions button{min-height:44px;white-space:normal}
+.dashboard,.lobby,.network-entry,.result,.rank-guide{min-width:0;overflow-wrap:anywhere}.network-seat{min-width:0}.room-code{overflow-wrap:anywhere}.rank-medal-card{min-width:0}.rank-medal-card strong{overflow-wrap:anywhere}.rank-medal-card .life-badge{object-fit:contain;overflow:visible}
+body:has(.immersive-table){--comfort-header:56px;height:100dvh;overflow:hidden}
+body:has(.immersive-table)>header{height:var(--comfort-header);min-height:var(--comfort-header)}
+main:has(.immersive-table){height:calc(100dvh - var(--comfort-header));min-height:0;overflow:hidden}
+.table-wrap:has(.immersive-table){height:100%;display:flex;flex-direction:column;gap:4px;padding:4px max(8px,env(safe-area-inset-right)) max(4px,env(safe-area-inset-bottom)) max(8px,env(safe-area-inset-left));overflow:hidden}
+.table-wrap:has(.immersive-table) .table-head{flex:0 0 auto;min-height:26px;margin:0;padding:3px 8px;font-size:11px;gap:4px 10px;border-width:1px}
+.table-wrap .table.immersive-table.three-table{height:auto!important;flex:1 1 auto;min-height:0;--seat-dock-height:56px;--status-height:32px}
+.three-table .seat-dock{padding:2px 0 5px;gap:6px}.three-table .seat-dock .seat-badge{height:48px!important}
+.three-table .webgl-stage{top:calc(var(--seat-dock-height) + var(--status-height));overflow:hidden}
+.table.immersive-table.three-table .center-label{top:var(--seat-dock-height)!important;left:0!important;width:100%!important;max-width:none!important;height:var(--status-height);min-height:0;transform:none!important;display:flex;align-items:center;justify-content:center;gap:12px;margin:0;padding:2px 8px;background:#10232bea;font-size:12px;white-space:nowrap;overflow:hidden}
+.table.immersive-table.three-table .center-label:before{font-size:11px;margin:0}
+.table.immersive-table.three-table:is(.is-opening,.is-dealing) .center-label{visibility:hidden}
+.table.immersive-table.three-table :is(.opening-scene,.dealing-scene,.dice-scene){top:var(--seat-dock-height);bottom:auto;left:0;transform:none;width:100%;max-width:100%;height:var(--status-height);padding:2px 6px;border:0;overflow:hidden;flex-wrap:nowrap}
+.table.immersive-table.three-table :is(.opening-scene,.dealing-scene,.dice-scene) p{line-height:1.2}
+/* Stable action rail: invisible when unavailable, so selecting never moves the hand. */
+.table-wrap:has(.immersive-table) .game-actions,
+.table-wrap:has(.immersive-table) .game-actions:not(:has(button:not(:disabled))){display:flex!important;flex:0 0 56px;min-height:56px;max-height:56px;flex-wrap:nowrap;justify-content:flex-start;overflow-x:auto;overflow-y:hidden;margin:0;padding:3px 6px;gap:8px;box-shadow:none;border:0;scrollbar-width:thin}
+.table-wrap:has(.immersive-table) .game-actions:not(:has(button:not(:disabled))){visibility:hidden;pointer-events:none}
+.table-wrap:has(.immersive-table) .game-actions button{flex:0 0 auto;min-width:92px;min-height:44px;max-height:48px;white-space:nowrap;padding:5px 14px;font-size:16px;letter-spacing:0;box-shadow:none}
+.table-wrap:has(.immersive-table) .game-actions button:first-of-type{margin-left:auto}.table-wrap:has(.immersive-table) .game-actions button:last-of-type{margin-right:auto}
+.table-wrap:has(.immersive-table) .solo-hint{flex:0 0 auto;font-size:10px;margin:0;line-height:1.4}
+.online-wrap:has(.immersive-table)>.invite-link,.online-wrap:has(.immersive-table)>.table-scoring{display:none}
+.online-wrap:has(.immersive-table)>.voice-controls{flex:0 0 auto;max-height:40px;overflow:auto;margin:0;padding:3px 6px}
+@media(max-width:700px),(max-height:600px) and (orientation:landscape){
+ body>header,body:has(.three-table)>header{--comfort-header:calc(44px + env(safe-area-inset-top));height:var(--comfort-header);min-height:var(--comfort-header);padding:env(safe-area-inset-top) max(6px,env(safe-area-inset-right)) 0 max(6px,env(safe-area-inset-left));gap:6px}
+ body:has(.immersive-table){--comfort-header:calc(44px + env(safe-area-inset-top))}
+ body>header>button,body:has(.three-table)>header>button{min-height:38px;font-size:12px;padding:5px 12px}
+ body>header .brand,body:has(.three-table)>header .brand{flex:1 1 auto;margin:0 auto 0 0}header .brand>svg{width:28px;height:32px}
+ .table-wrap:has(.immersive-table){gap:2px;padding:2px max(4px,env(safe-area-inset-right)) max(2px,env(safe-area-inset-bottom)) max(4px,env(safe-area-inset-left))}
+ .table-wrap .table.immersive-table.three-table{--seat-dock-height:44px;--status-height:28px}
+ .three-table .seat-dock{grid-template-columns:repeat(4,minmax(0,1fr));padding:1px 0 3px;gap:3px}.three-table .seat-dock .seat-badge{height:39px!important;grid-template-columns:10px 22px minmax(0,1fr);padding:2px!important;gap:3px!important}
+ .seat-dock .portrait,.seat-dock .avatar-portrait{--avatar-size:20px;width:20px;height:20px}.three-table .seat-dock .player-name{font-size:9px}.seat-dock .seat-score{font-size:11px}
+ .table.immersive-table.three-table .center-label{font-size:10px;gap:8px}.table.immersive-table.three-table .center-label:before{font-size:10px}
+ .table-wrap:has(.immersive-table) .table-head{min-height:21px;padding:1px 4px;font-size:9px}
+ .table-wrap:has(.immersive-table) .game-actions,.table-wrap:has(.immersive-table) .game-actions:not(:has(button:not(:disabled))){flex-basis:48px;min-height:48px;max-height:48px;padding:2px 4px}
+ .table-wrap:has(.immersive-table) .game-actions button{min-height:44px;font-size:15px}
+ .table-wrap:has(.immersive-table) .solo-hint{display:none}
+ .showa-scene{inset:44px 0 0}
+}
+@media(max-width:700px) and (orientation:portrait){
+ .table-wrap .table.immersive-table.three-table{--seat-dock-height:88px}
+ .three-table .seat-dock{grid-template-columns:repeat(2,minmax(0,1fr));gap:4px}
+ .three-table .seat-dock .player-name{font-size:11px}.seat-dock .seat-score{font-size:12px}
+ .rank-medal-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important}}

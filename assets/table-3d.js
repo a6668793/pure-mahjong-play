@@ -1,3 +1,4 @@
+import './play-comfort.js';
 import {mountShowaScene,unmountShowaScene} from './showa-scene.js';
 import {SoftwareRenderer} from './table-software-renderer.js';
 /* PURE MAHJONG V1.5 — presentation-only WebGL adapter.
@@ -195,23 +196,29 @@ class TableScene {
     const h=Math.max(this.stage.clientHeight,120),w=(landscape||portrait)?Math.max(this.board.clientWidth,280):Math.max(this.board.clientWidth,820);
     const dimensionsChanged=this.width!==w||this.height!==h;
     this.width=w;this.height=h;this.canvas.style.width=w+'px';this.canvas.style.height=h+'px';
-    if(dimensionsChanged)this.renderer.setSize(w,h,false);this.camera.aspect=w/h;
+    if(dimensionsChanged)this.renderer.setSize(w,h,false);
+    // Keep the whole world above the foreground hand, with undistorted perspective.
+    const compact=landscape||portrait;
+    this.worldHeight=compact?Math.max(60,h-(portrait?166:94)):h;
+    this.camera.clearViewOffset();this.camera.aspect=w/this.worldHeight;
+    if(compact)this.camera.setViewOffset(w,this.worldHeight,0,0,w,h);
+    this.board.dataset.worldHeight=String(this.worldHeight);
     if(this.lastViewport!==this.board.clientWidth){this.stage.scrollLeft=Math.max(0,(w-this.board.clientWidth)/2);this.lastViewport=this.board.clientWidth;}
     const T=this.T,target=new T.Vector3(0,.25,.1),direction=new T.Vector3(0,18,23).normalize();
     // Fit real world bounds, rather than skewing each UI region independently.
     const bounds=[];for(const x of [-11.7,11.7])for(const z of [-8,8])for(const y of [-1,2.3])bounds.push(new T.Vector3(x,y,z));
     let lo=12,hi=95;
-    for(let i=0;i<20;i++){const d=(lo+hi)/2;this.camera.position.copy(target).addScaledVector(direction,d);this.camera.lookAt(target);this.camera.updateProjectionMatrix();this.camera.updateMatrixWorld();const fits=bounds.every(p=>{const q=p.clone().project(this.camera);return Math.abs(q.x)<.97&&Math.abs(q.y)<.94});if(fits)hi=d;else lo=d;}
+    for(let i=0;i<20;i++){const d=(lo+hi)/2;this.camera.position.copy(target).addScaledVector(direction,d);this.camera.lookAt(target);this.camera.updateProjectionMatrix();this.camera.updateMatrixWorld();const fits=bounds.every(p=>{const q=p.clone().project(this.camera);return Math.abs(q.x)<.97&&q.y<.94&&q.y>1-2*this.worldHeight/h+.06});if(fits)hi=d;else lo=d;}
     this.camera.position.copy(target).addScaledVector(direction,hi);this.camera.lookAt(target);this.camera.updateMatrixWorld();
     this.placeForegroundHand();this.scene.updateMatrixWorld(true);this.projectControls();this.render();
   }
   placeForegroundHand(){
     const compact=matchMedia('(max-width:700px), (max-width:1100px) and (max-height:600px) and (orientation:landscape)').matches;
     this.board.dataset.compactHand=String(compact);this.handRail.visible=this.handLip.visible=compact&&this.buttons.length>0;
-    const T=this.T,depth=10,viewHeight=2*Math.tan(this.camera.fov*Math.PI/360)*depth,units=viewHeight/this.height;
+    const T=this.T,depth=10,viewHeight=2*Math.tan(this.camera.fov*Math.PI/360)*depth,units=viewHeight/this.worldHeight;
     const count=this.buttons.length,hasDraw=this.buttons.some(x=>x.button.classList.contains('drawn-tile')),twoRows=matchMedia('(max-width:700px) and (orientation:portrait)').matches&&count>9,columns=twoRows?Math.ceil(count/2):count;
     const step=Math.min(49,(this.width-50-(hasDraw?13:0))/Math.max(columns,1)),tileWidth=step-3;
-    const position=(mesh,x,y,z)=>{const k=z/depth;mesh.position.set((x-this.width/2)*units*k,(this.height/2-y)*units*k,-z).applyMatrix4(this.camera.matrixWorld);mesh.quaternion.copy(this.camera.quaternion);};
+    const position=(mesh,x,y,z)=>{const k=z/depth;mesh.position.set((x-this.width/2)*units*k,(this.worldHeight/2-y)*units*k,-z).applyMatrix4(this.camera.matrixWorld);mesh.quaternion.copy(this.camera.quaternion);};
     for(const [i,item]of this.buttons.entries()){
       const {mesh,button}=item;
       if(mesh.userData.contactShadow)mesh.userData.contactShadow.visible=!compact;
@@ -235,7 +242,8 @@ class TableScene {
       const left=Math.min(...points.map(p=>p.x)),top=Math.min(...points.map(p=>p.y)),right=Math.max(...points.map(p=>p.x)),bottom=Math.max(...points.map(p=>p.y));
       Object.assign(button.style,{left:left+'px',top:top+'px',width:(right-left)+'px',height:(bottom-top)+'px'});
     }
-    if(this.centerLabel){const p=this.project([0,.5,-.1]);Object.assign(this.centerLabel.style,{left:p.x+'px',top:p.y+'px'});}
+    // Status lives in its reserved DOM rail, never over the river.
+    this.centerLabel?.removeAttribute('style');
   }
   render(){if(this.dead||this.frame)return;this.frame=requestAnimationFrame(()=>{this.frame=null;if(this.dead)return;try{const started=performance.now();this.renderer.render(this.scene,this.camera);this.board.dataset.renderMs=(performance.now()-started).toFixed(1);}catch(error){console.warn('Table render failed',error);}});}
   dispose(){
