@@ -53,3 +53,9 @@ main:has(.immersive-table){height:calc(100dvh - var(--comfort-header));min-heigh
  .rank-medal-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important}}
+
+/* Round, scores and current turn share one reserved information strip. */
+.table-wrap:has(.immersive-table) .table-head .comfort-status{position:static!important;transform:none!important;display:block;width:auto;max-width:none;min-height:0;margin:0;padding:1px 8px;background:#214735;color:#ffe7b5;font-size:11px;line-height:1.4;letter-spacing:0;border:0;box-shadow:none}
+.table-wrap:has(.immersive-table) .table-head .comfort-status:before{display:none}
+.table-wrap .table.immersive-table.three-table{--status-height:0px}
+.table-wrap .table.immersive-table.three-table:is(.is-opening,.is-dealing){--status-height:32px}

@@ -180,6 +180,7 @@ class TableScene {
       stacks.forEach((stack,i)=>{for(const layer of stack.children){const n=layer.classList.contains('layer-1')?1:0;const [x,z]=this.rotate((i-(stacks.length-1)/2)*.655,sideIndex%2?7.3:4.5,angle);this.tile(backSvg,x,.48+n*.37,z,{flat:true,angle});}});
     }
     this.centerLabel=this.board.querySelector('.center-label');
+    if(this.centerLabel){this.centerLabel.classList.add('comfort-status');this.board.parentElement.querySelector('.table-head')?.append(this.centerLabel);}
   }
   updateBoard(board) {
     this.resizeObserver.unobserve(this.board);this.board.classList.remove('three-table');this.hud?.remove();
@@ -227,7 +228,7 @@ class TableScene {
       const row=twoRows?Math.floor(i/columns):0,col=twoRows?i%columns:i,rowCount=twoRows?Math.min(columns,count-row*columns):count;
       const rowHasDraw=hasDraw&&(!twoRows||row===1),total=(rowCount-1)*step+(rowHasDraw?13:0);
       position(mesh,this.width/2-total/2+col*step+(drawn?13:0),this.height-38-(twoRows&&row===0?72:0)-(selected?10:0),depth);
-      mesh.quaternion.multiply(new T.Quaternion().setFromAxisAngle(new T.Vector3(1,0,0),-.12));mesh.scale.setScalar(tileWidth/(.62/units));
+      mesh.quaternion.multiply(new T.Quaternion().setFromAxisAngle(new T.Vector3(1,0,0),-.12));mesh.scale.setScalar(tileWidth/(.62/units));mesh.scale.z=Math.min(mesh.scale.x,.35);
     }
     if(compact){
       position(this.handRail,this.width/2,this.height-7,10.8);this.handRail.scale.set((this.width-12)*units*1.08,12*units,.22);
