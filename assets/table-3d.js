@@ -227,7 +227,7 @@ class TableScene {
       const selected=button.classList.contains('selected'),drawn=button.classList.contains('drawn-tile');
       const row=twoRows?Math.floor(i/columns):0,col=twoRows?i%columns:i,rowCount=twoRows?Math.min(columns,count-row*columns):count;
       const rowHasDraw=hasDraw&&(!twoRows||row===1),total=(rowCount-1)*step+(rowHasDraw?13:0);
-      position(mesh,this.width/2-total/2+col*step+(drawn?13:0),this.height-38-(twoRows&&row===0?72:0)-(selected?10:0),depth);
+      position(mesh,this.width/2-total/2+col*step+(drawn?13:0),this.height-44-(twoRows&&row===0?72:0)-(selected?10:0),depth);
       mesh.quaternion.multiply(new T.Quaternion().setFromAxisAngle(new T.Vector3(1,0,0),-.12));mesh.scale.setScalar(tileWidth/(.62/units));mesh.scale.z=Math.min(mesh.scale.x,.35);
     }
     if(compact){

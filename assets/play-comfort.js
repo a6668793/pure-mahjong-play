@@ -16,3 +16,11 @@ more.onclick=()=>menu.showModal();header.append(more);
 // Close this dialog before the original handler opens its own dialog.
 items.addEventListener('click',event=>{if(event.target.closest('button'))menu.close();},true);
 menu.addEventListener('click',event=>{if(event.target===menu){const r=menu.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)menu.close();}});
+
+// Always reachable close control; native close events retain the game's resume logic.
+function addClose(dialog){
+  if(dialog.querySelector(':scope > .comfort-close'))return;
+  const close=document.createElement('button');close.type='button';close.className='comfort-close';close.textContent='×';close.setAttribute('aria-label','關閉視窗');close.onclick=()=>dialog.close();dialog.prepend(close);
+}
+document.querySelectorAll('dialog').forEach(addClose);
+new MutationObserver(records=>{for(const record of records)for(const node of record.addedNodes)if(node.nodeType===1&&node.matches('dialog'))addClose(node);}).observe(document.body,{childList:true});
