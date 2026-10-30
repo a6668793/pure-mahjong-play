@@ -194,7 +194,7 @@ class TableScene {
   resize() {
     if(this.dead)return;
     const landscape=matchMedia('(max-width:1100px) and (max-height:600px) and (orientation:landscape)').matches;
-    const portrait=matchMedia('(max-width:700px) and (orientation:portrait)').matches;
+    const portrait=matchMedia('(max-width:900px) and (orientation:portrait)').matches;
     const h=Math.max(this.stage.clientHeight,120),w=Math.max(this.board.clientWidth,280);
     const dimensionsChanged=this.width!==w||this.height!==h;
     this.width=w;this.height=h;this.canvas.style.width=w+'px';this.canvas.style.height=h+'px';
@@ -210,15 +210,15 @@ class TableScene {
     // Fit real world bounds, rather than skewing each UI region independently.
     const bounds=[];for(const x of [-11.7,11.7])for(const z of [-8,8])for(const y of [-1,2.3])bounds.push(new T.Vector3(x,y,z));
     let lo=12,hi=95;
-    for(let i=0;i<20;i++){const d=(lo+hi)/2;this.camera.position.copy(target).addScaledVector(direction,d);this.camera.lookAt(target);this.camera.updateProjectionMatrix();this.camera.updateMatrixWorld();const fits=bounds.every(p=>{const q=p.clone().project(this.camera);return Math.abs(q.x)<(w<600?.96:Math.max(.55,1-240/w))&&q.y<.94&&q.y>1-2*this.worldHeight/h+.06});if(fits)hi=d;else lo=d;}
+    for(let i=0;i<20;i++){const d=(lo+hi)/2;this.camera.position.copy(target).addScaledVector(direction,d);this.camera.lookAt(target);this.camera.updateProjectionMatrix();this.camera.updateMatrixWorld();const fits=bounds.every(p=>{const q=p.clone().project(this.camera);return Math.abs(q.x)<(w<600?.96:Math.max(.55,1-160/w))&&q.y<.94&&q.y>1-2*this.worldHeight/h+.06});if(fits)hi=d;else lo=d;}
     this.camera.position.copy(target).addScaledVector(direction,hi);this.camera.lookAt(target);this.camera.updateMatrixWorld();
     this.placeForegroundHand();this.scene.updateMatrixWorld(true);this.projectControls();this.render();
   }
   placeForegroundHand(){
-    const compact=matchMedia('(max-width:700px), (max-width:1100px) and (max-height:600px) and (orientation:landscape)').matches;
+    const compact=matchMedia('(max-width:900px) and (orientation:portrait), (max-width:1100px) and (max-height:600px) and (orientation:landscape)').matches;
     this.board.dataset.compactHand=String(compact);this.handRail.visible=this.handLip.visible=compact&&this.buttons.length>0;
     const T=this.T,depth=10,viewHeight=2*Math.tan(this.camera.fov*Math.PI/360)*depth,units=viewHeight/this.worldHeight;
-    const count=this.buttons.length,hasDraw=this.buttons.some(x=>x.button.classList.contains('drawn-tile')),twoRows=matchMedia('(max-width:700px) and (orientation:portrait)').matches&&count>9,columns=twoRows?Math.ceil(count/2):count;
+    const count=this.buttons.length,hasDraw=this.buttons.some(x=>x.button.classList.contains('drawn-tile')),twoRows=matchMedia('(max-width:900px) and (orientation:portrait)').matches&&count>9,columns=twoRows?Math.ceil(count/2):count;
     const step=Math.min(49,(this.width-50-(hasDraw?13:0))/Math.max(columns,1)),tileWidth=step-3;
     const position=(mesh,x,y,z)=>{const k=z/depth;mesh.position.set((x-this.width/2)*units*k,(this.worldHeight/2-y)*units*k,-z).applyMatrix4(this.camera.matrixWorld);mesh.quaternion.copy(this.camera.quaternion);};
     for(const [i,item]of this.buttons.entries()){

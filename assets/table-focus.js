@@ -27,7 +27,7 @@ export function mountTableFocus(board){
     const bubble=document.createElement('div');bubble.className='seat-dialogue';bubble.setAttribute('role','status');bubble.setAttribute('aria-live','polite');
     const last=zone?.querySelector('.latest-discard');
     if(last){const text=last.getAttribute('aria-label')??'';bubble.textContent=text.includes('打出 ')?'打出 '+text.split('打出 ').pop():text;}
-    else if(seat.classList.contains('seat-active')&&current){bubble.textContent=current.includes('等待回應')?current:(entry.side==='south'?'輪到你出牌':'思考中…');}
+    else if(seat.classList.contains('seat-active')&&current&&!board.matches('.is-opening,.is-dealing')){bubble.textContent=current;}
     if(bubble.textContent)seat.append(bubble);
   }
   for(const claim of board.querySelectorAll(':scope > .claim-announcement')){
@@ -40,3 +40,7 @@ export function mountTableFocus(board){
   }
   board.classList.add('focus-table');
 }
+
+// Close the optional panel when play resumes; dialogs retain native Escape handling.
+document.addEventListener('pointerdown',event=>{if(panel.open&&!panel.contains(event.target)&&!event.target.closest('dialog'))panel.open=false;});
+document.addEventListener('keydown',event=>{if(event.key==='Escape'&&panel.open&&!document.querySelector('dialog[open]')){panel.open=false;summary.focus();}});
