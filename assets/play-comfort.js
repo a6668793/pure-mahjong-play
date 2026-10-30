@@ -1,5 +1,5 @@
 const style=document.createElement('link');style.rel='stylesheet';style.href=new URL('./play-comfort.css?v=161',import.meta.url).href;document.head.append(style);
-const version=document.querySelector('footer');if(version)for(const child of version.children)if(child.textContent.includes('1.6.0'))child.textContent='1.6.1 · 清晰舒適牌桌';
+const version=document.querySelector('footer');if(version)for(const child of version.children)if(child.textContent.includes('1.6.0'))child.textContent='1.6.2 · 方位對話牌桌';
 /* Presentation only: move original navigation nodes; preserve every handler. */
 const header=document.querySelector('body > header');
 const menu=document.createElement('dialog');

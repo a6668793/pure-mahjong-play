@@ -1,4 +1,5 @@
 import './play-comfort.js';
+import {mountTableFocus} from './table-focus.js';
 import {mountShowaScene,unmountShowaScene} from './showa-scene.js';
 import {SoftwareRenderer} from './table-software-renderer.js';
 /* PURE MAHJONG V1.5 — presentation-only WebGL adapter.
@@ -180,7 +181,7 @@ class TableScene {
       stacks.forEach((stack,i)=>{for(const layer of stack.children){const n=layer.classList.contains('layer-1')?1:0;const [x,z]=this.rotate((i-(stacks.length-1)/2)*.655,sideIndex%2?7.3:4.5,angle);this.tile(backSvg,x,.48+n*.37,z,{flat:true,angle});}});
     }
     this.centerLabel=this.board.querySelector('.center-label');
-    if(this.centerLabel){this.centerLabel.classList.add('comfort-status');this.board.parentElement.querySelector('.table-head')?.append(this.centerLabel);}
+    mountTableFocus(this.board);this.centerLabel=null;
   }
   updateBoard(board) {
     this.resizeObserver.unobserve(this.board);this.board.classList.remove('three-table');this.hud?.remove();
@@ -194,7 +195,7 @@ class TableScene {
     if(this.dead)return;
     const landscape=matchMedia('(max-width:1100px) and (max-height:600px) and (orientation:landscape)').matches;
     const portrait=matchMedia('(max-width:700px) and (orientation:portrait)').matches;
-    const h=Math.max(this.stage.clientHeight,120),w=(landscape||portrait)?Math.max(this.board.clientWidth,280):Math.max(this.board.clientWidth,820);
+    const h=Math.max(this.stage.clientHeight,120),w=Math.max(this.board.clientWidth,280);
     const dimensionsChanged=this.width!==w||this.height!==h;
     this.width=w;this.height=h;this.canvas.style.width=w+'px';this.canvas.style.height=h+'px';
     if(dimensionsChanged)this.renderer.setSize(w,h,false);
@@ -209,7 +210,7 @@ class TableScene {
     // Fit real world bounds, rather than skewing each UI region independently.
     const bounds=[];for(const x of [-11.7,11.7])for(const z of [-8,8])for(const y of [-1,2.3])bounds.push(new T.Vector3(x,y,z));
     let lo=12,hi=95;
-    for(let i=0;i<20;i++){const d=(lo+hi)/2;this.camera.position.copy(target).addScaledVector(direction,d);this.camera.lookAt(target);this.camera.updateProjectionMatrix();this.camera.updateMatrixWorld();const fits=bounds.every(p=>{const q=p.clone().project(this.camera);return Math.abs(q.x)<.97&&q.y<.94&&q.y>1-2*this.worldHeight/h+.06});if(fits)hi=d;else lo=d;}
+    for(let i=0;i<20;i++){const d=(lo+hi)/2;this.camera.position.copy(target).addScaledVector(direction,d);this.camera.lookAt(target);this.camera.updateProjectionMatrix();this.camera.updateMatrixWorld();const fits=bounds.every(p=>{const q=p.clone().project(this.camera);return Math.abs(q.x)<(w<600?.96:Math.max(.55,1-240/w))&&q.y<.94&&q.y>1-2*this.worldHeight/h+.06});if(fits)hi=d;else lo=d;}
     this.camera.position.copy(target).addScaledVector(direction,hi);this.camera.lookAt(target);this.camera.updateMatrixWorld();
     this.placeForegroundHand();this.scene.updateMatrixWorld(true);this.projectControls();this.render();
   }
